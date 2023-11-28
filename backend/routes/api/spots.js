@@ -6,7 +6,6 @@ const { setTokenCookie, restoreUser } = require('../../utils/auth');
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 const { User, Spot, Review, SpotImage } = require('../../db/models');
-const spot = require('../../db/models/spot');
 
 const router = express.Router();
 
@@ -18,6 +17,18 @@ const authenticateUser = async (req, res, next) => {
     } else {
         return res.status(401).json({"message": "Authentication required"})
     }
+};
+
+const authorizeUser = async (req, res, next) => {
+    const { spotId } = req.params;
+    const { user } = req;
+
+    const spot = await Spot.findByPk(spotId);
+    if (spot) {
+        if (spot.ownerId == user.id) {
+            next()
+        } else { return res.status(403).json({"message": "Forbidden"})}
+    } else { return res.status(404).json({"message": "Spot couldn't be found"})}
 }
 
 const defaultSpots = async (req, res, next) => {
@@ -201,6 +212,15 @@ router.post('/', authenticateUser, validateSpot, async (req, res, next) => {
 
 });
 
+router.delete('/:spotId',
+authenticateUser, authorizeUser,
+async (req, res, next) => {
+    const spot = await Spot.findByPk(req.params.spotId);
 
+    await spot.destroy();
+
+
+    res.json({"message": "Successfully deleted"});
+})
 
 module.exports = router;
