@@ -212,6 +212,51 @@ router.post('/', authenticateUser, validateSpot, async (req, res, next) => {
 
 });
 
+router.post('/:spotId/images',
+authenticateUser, authorizeUser,
+async (req, res, next) => {
+    const resImage = {};
+    const { spotId } = req.params;
+    const { url, preview } = req.body;
+    const newSpotImage = await SpotImage.create({
+        spotId,
+        url,
+        preview
+    });
+
+    resImage.spotId = spotId;
+    resImage.url = url;
+    resImage.preview = preview;
+    res.json(resImage);
+});
+
+router.put('/:spotId',
+authenticateUser, authorizeUser, validateSpot,
+async (req, res, next) => {
+    const { address, city, state, country, lat, lng, name, description, price } = req.body;
+
+    const spot = await Spot.findByPk(req.params.spotId);
+
+    spot.address = address || spot.address;
+    spot.city = city || spot.city;
+    spot.state = state || spot.state;
+    spot.country = country || spot.country;
+    spot.lat = lat || spot.lat;
+    spot.lng = lng || spot.lng;
+    spot.name = name || spot.name;
+    spot.description = description || spot.description;
+    spot.price = price;
+
+    spot.validateSpot;
+
+    spot.save();
+
+
+    res.json(spot)
+
+}
+)
+
 router.delete('/:spotId',
 authenticateUser, authorizeUser,
 async (req, res, next) => {
@@ -221,6 +266,6 @@ async (req, res, next) => {
 
 
     res.json({"message": "Successfully deleted"});
-})
+});
 
 module.exports = router;
