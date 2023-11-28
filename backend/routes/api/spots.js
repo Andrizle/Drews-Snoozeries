@@ -212,6 +212,26 @@ router.post('/', authenticateUser, validateSpot, async (req, res, next) => {
 
 });
 
+router.post('/:spotId/images',
+authenticateUser, authorizeUser,
+async (req, res, next) => {
+    const resImage = {};
+    const { spotId } = req.params;
+    const { url, preview } = req.body;
+    const newSpotImage = await SpotImage.create({
+        spotId,
+        url,
+        preview
+    });
+
+    resImage.spotId = spotId;
+    resImage.url = url;
+    resImage.preview = preview;
+    res.json(resImage);
+});
+
+
+
 router.delete('/:spotId',
 authenticateUser, authorizeUser,
 async (req, res, next) => {
@@ -221,6 +241,6 @@ async (req, res, next) => {
 
 
     res.json({"message": "Successfully deleted"});
-})
+});
 
 module.exports = router;
