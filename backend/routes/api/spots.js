@@ -230,7 +230,32 @@ async (req, res, next) => {
     res.json(resImage);
 });
 
+router.put('/:spotId',
+authenticateUser, authorizeUser, validateSpot,
+async (req, res, next) => {
+    const { address, city, state, country, lat, lng, name, description, price } = req.body;
 
+    const spot = await Spot.findByPk(req.params.spotId);
+
+    spot.address = address || spot.address;
+    spot.city = city || spot.city;
+    spot.state = state || spot.state;
+    spot.country = country || spot.country;
+    spot.lat = lat || spot.lat;
+    spot.lng = lng || spot.lng;
+    spot.name = name || spot.name;
+    spot.description = description || spot.description;
+    spot.price = price;
+
+    spot.validateSpot;
+
+    spot.save();
+
+
+    res.json(spot)
+
+}
+)
 
 router.delete('/:spotId',
 authenticateUser, authorizeUser,
