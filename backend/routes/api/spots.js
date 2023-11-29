@@ -1,11 +1,11 @@
 const express = require('express')
-const { Op, json } = require('sequelize');
-const bcrypt = require('bcryptjs');
+const { Op } = require('sequelize');
+
 
 const { setTokenCookie, restoreUser } = require('../../utils/auth');
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
-const { User, Spot, Review, SpotImage } = require('../../db/models');
+const { User, Spot, Review, SpotImage, ReviewImage } = require('../../db/models');
 
 const router = express.Router();
 
@@ -51,13 +51,13 @@ const defaultSpots = async (req, res, next) => {
 
         const avgRating = reviewsSum / reviewsCount;
 
-        const previewImage = await SpotImage.findByPk(spot.id, {
-            attributes: ['url']
-        })
+        const previewImages = await SpotImage.findByPk(spot.id)
 
         spot = spot.toJSON();
         spot.avgRating = avgRating;
-        spot.previewImage = previewImage;
+        if (previewImages) {
+            spot.previewImage = previewImages.url
+        }
 
         spots.push(spot)
     }
@@ -93,13 +93,11 @@ router.get('/current', async (req, res, next) => {
 
             const avgRating = reviewsSum / reviewsCount;
 
-            const previewImage = await SpotImage.findByPk(spot.id, {
-                attributes: ['url']
-            })
+            const previewImages = await SpotImage.findByPk(spot.id)
 
             spot = spot.toJSON();
             spot.avgRating = avgRating;
-            spot.previewImage = await previewImage;
+            spot.previewImage =  previewImages.url
 
             spots.push(spot)
         }
@@ -151,6 +149,32 @@ router.get('/:spotId', async (req, res, next) => {
     } else { return res.status(404).json({"message": "Spot couldn't be found"})}
 
 });
+
+router.get('/:spotId/reviews', async (req, res, next) => {
+    const { spotId } = req.params;
+
+        const reviews = await Review.findAll({
+        where: {
+            spotId
+        },
+        include: [
+            {
+                model: User,
+                attributes: ['id', 'firstName', 'lastName']
+            },
+            {
+                model: ReviewImage,
+                attributes: ['id', 'url']
+            }
+        ]
+    });
+
+    if (reviews.length) {
+        res.json({"Reviews": reviews});
+    } else { res.status(404).json({"message": "Spot couldn't be found"})}
+
+
+})
 
 const validateSpot = [
     check('address')
