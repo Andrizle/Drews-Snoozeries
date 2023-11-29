@@ -44,12 +44,6 @@ authenticateUser, async (req, res, next) => {
                 attributes: ['id', 'firstName', 'lastName']
             },
             {
-                model: Spot,
-                attributes: {
-                    exclude: ['createdAt', 'updatedAt', 'description']
-                }
-            },
-            {
                 model: ReviewImage,
                 attributes: ['id', 'url']
             }
@@ -57,27 +51,35 @@ authenticateUser, async (req, res, next) => {
 
     });
 
-    // for (let i = 0; i < reviews.length; i++) {
-    //     let review = reviews[i];
-    //     const spotImages = await SpotImage.findAll({
-    //         where: {
-    //             spotId: review.spotId
-    //         }
-    //     });
+    for (let i = 0; i < reviews.length; i++) {
+        let review = reviews[i];
+        let spot = await Spot.findByPk(review.spotId, {
+            attributes: {
+                exclude: ['description', 'createdAt', 'updatedAt']
+            }
+        });
 
-    //     for (let i = 0; i < spotImages.length; i++) {
-    //         let spotImage = spotImages[i];
-    //         review = review.toJSON();
+        const spotImage = await SpotImage.findOne({
+            where: {
+                preview: true
+            }
+        });
+        // res.json(spotImage);
 
-    //         if (spotImage.preview === true) {
-    //             return review.Spot.previewImage = spotImage.url
-    //         }
-    //     }
+        if (spotImage) {
+            spot = spot.toJSON();
+            spot.previewImage = spotImage.url;
+        };
+        // res.json(spot);
 
-    //     resReviews.push(review);
-    // }
+        review = review.toJSON();
+        review.Spot = spot;
+        // res.json(review)
 
-    res.json({"Reviews": reviews});
+        resReviews.push(review);
+    }
+
+    res.json({"Reviews": resReviews});
 }
 )
 
