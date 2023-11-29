@@ -1,6 +1,5 @@
 const express = require('express')
 const { Op } = require('sequelize');
-const bcrypt = require('bcryptjs');
 
 const { setTokenCookie, restoreUser } = require('../../utils/auth');
 const { check } = require('express-validator');
@@ -51,13 +50,13 @@ const defaultSpots = async (req, res, next) => {
 
         const avgRating = reviewsSum / reviewsCount;
 
-        const previewImage = await SpotImage.findByPk(spot.id, {
-            attributes: ['url']
-        })
+        const previewImages = await SpotImage.findByPk(spot.id)
 
         spot = spot.toJSON();
         spot.avgRating = avgRating;
-        spot.previewImage = previewImage;
+        if (previewImages) {
+            spot.previewImage = previewImages.url
+        }
 
         spots.push(spot)
     }
@@ -93,13 +92,11 @@ router.get('/current', async (req, res, next) => {
 
             const avgRating = reviewsSum / reviewsCount;
 
-            const previewImage = await SpotImage.findByPk(spot.id, {
-                attributes: ['url']
-            })
+            const previewImages = await SpotImage.findByPk(spot.id)
 
             spot = spot.toJSON();
             spot.avgRating = avgRating;
-            spot.previewImage = await previewImage;
+            spot.previewImage =  previewImages.url
 
             spots.push(spot)
         }
