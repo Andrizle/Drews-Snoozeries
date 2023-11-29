@@ -22,7 +22,8 @@ const authorizeUser = async (req, res, next) => {
     const { reviewId } = req.params;
     const { user } = req;
 
-    const review = await Spot.findByPk(reviewId);
+    const review = await Review.findByPk(reviewId);
+
     if (review) {
         if (review.userId == user.id) {
             next()
@@ -80,7 +81,35 @@ authenticateUser, async (req, res, next) => {
     }
 
     res.json({"Reviews": resReviews});
-}
-)
+});
+
+router.post('/:reviewId/images',
+authenticateUser, authorizeUser,
+async (req, res, next) => {
+    const { reviewId } = req.params;
+    const { url } = req.body;
+    const resReviewImage = {};
+
+    const reviewImages = await ReviewImage.findAll({
+        where: {
+            reviewId
+        }
+    });
+
+    if (reviewImages.length < 10) {
+        const newReviewImage = await ReviewImage.create({
+        reviewId,
+        url
+        });
+
+        resReviewImage.id = newReviewImage.id;
+        resReviewImage.url = url
+
+        res.json(resReviewImage);
+    } else { return res.status(403).json({"message": "Maximum number of images for this resource was reached"})}
+
+
+
+});
 
 module.exports = router;
