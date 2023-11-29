@@ -316,17 +316,15 @@ async (req, res, next) => {
 
     const spot = await Spot.findByPk(req.params.spotId);
 
-    spot.address = address || spot.address;
-    spot.city = city || spot.city;
-    spot.state = state || spot.state;
-    spot.country = country || spot.country;
-    spot.lat = lat || spot.lat;
-    spot.lng = lng || spot.lng;
-    spot.name = name || spot.name;
-    spot.description = description || spot.description;
+    spot.address = address;
+    spot.city = city;
+    spot.state = state;
+    spot.country = country;
+    spot.lat = lat;
+    spot.lng = lng;
+    spot.name = name;
+    spot.description = description;
     spot.price = price;
-
-    spot.validateSpot;
 
     spot.save();
 

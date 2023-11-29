@@ -98,8 +98,8 @@ async (req, res, next) => {
 
     if (reviewImages.length < 10) {
         const newReviewImage = await ReviewImage.create({
-        reviewId,
-        url
+            reviewId,
+            url
         });
 
         resReviewImage.id = newReviewImage.id;
@@ -108,7 +108,32 @@ async (req, res, next) => {
         res.json(resReviewImage);
     } else { return res.status(403).json({"message": "Maximum number of images for this resource was reached"})}
 
+});
 
+const validateReview = [
+    check('review')
+      .exists({ checkFalsy: true })
+      .notEmpty()
+      .withMessage('Review text is required'),
+    check('stars')
+      .exists({ checkFalsy: true })
+      .isInt({min:1, max:5, allow_leading_zeroes: false})
+      .withMessage('Stars must be an integer from 1 to 5'),
+    handleValidationErrors
+  ];
+
+router.put('/:reviewId',
+authenticateUser, authorizeUser, validateReview,
+async (req, res, next) => {
+    const { review, stars } = req.body;
+    const rev = await Review.findByPk(req.params.reviewId);
+
+    rev.review = review;
+    rev.stars = stars;
+
+    rev.save();
+
+    res.json(rev);
 
 });
 
