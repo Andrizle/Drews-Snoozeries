@@ -137,4 +137,14 @@ async (req, res, next) => {
 
 });
 
+router.delete('/:reviewId',
+authenticateUser, authorizeUser,
+async (req, res, next) => {
+    const review = await Review.findByPk(req.params.reviewId);
+
+    await review.destroy();
+
+    res.json({"message": "Successfully deleted"})
+})
+
 module.exports = router;
