@@ -28,6 +28,18 @@ const authorizeUser = async (req, res, next) => {
             next()
         } else { return res.status(403).json({"message": "Forbidden"})}
     } else { return res.status(404).json({"message": "Spot couldn't be found"})}
+};
+
+const spotExists = async (req, res, next) => {
+    const { spotId } = req.params;
+
+    const spot = await Spot.findByPk(spotId);
+
+    if (spot) {
+        next()
+    } else {
+        return res.status(404).json({"message": "Spot couldn't be found"})
+    }
 }
 
 const defaultSpots = async (req, res, next) => {
@@ -251,6 +263,50 @@ async (req, res, next) => {
     resImage.url = url;
     resImage.preview = preview;
     res.json(resImage);
+});
+
+const validateReview = [
+    check('review')
+      .exists({ checkFalsy: true })
+      .notEmpty()
+      .withMessage('Review text is required'),
+    check('stars')
+      .exists({ checkFalsy: true })
+      .isInt({min:1, max:5, allow_leading_zeroes: false})
+      .withMessage('Stars must be an integer from 1 to 5'),
+    handleValidationErrors
+  ];
+
+router.post('/:spotId/reviews',
+authenticateUser, spotExists, validateReview,
+async (req, res, next) => {
+    const { review, stars } = req.body;
+    const { spotId } = req.params;
+    const { user } = req;
+
+    const newReview = await Review.create({
+        spotId,
+        userId: user.id,
+        review,
+        stars
+    });
+
+    const spotReviews = await Review.findAll({
+        where: {
+            spotId
+        }
+    });
+
+    for (let i = 0; i < spotReviews.length; i++) {
+        const review = spotReviews[i];
+
+        if (review.userId == user.id) {
+            return res.status(500).json({"message": "User already has a review for this spot"})
+        }
+    }
+
+    res.status(201).json(newReview);
+
 });
 
 router.put('/:spotId',
