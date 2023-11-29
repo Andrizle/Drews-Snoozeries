@@ -17,7 +17,7 @@ const authenticateUser = async (req, res, next) => {
     }
 };
 
-router.get('/current', async (req, res, next) => {
+router.get('/current', authenticateUser, async (req, res, next) => {
     const { user } = req;
     const resBookings = [];
 
