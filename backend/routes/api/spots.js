@@ -1,6 +1,5 @@
 const express = require('express')
-const { Op, json } = require('sequelize');
-const bcrypt = require('bcryptjs');
+const { Op } = require('sequelize');
 
 const { setTokenCookie, restoreUser } = require('../../utils/auth');
 const { check } = require('express-validator');
@@ -51,13 +50,13 @@ const defaultSpots = async (req, res, next) => {
 
         const avgRating = reviewsSum / reviewsCount;
 
-        const previewImage = await SpotImage.findByPk(spot.id, {
-            attributes: ['url']
-        })
+        const previewImages = await SpotImage.findByPk(spot.id)
 
         spot = spot.toJSON();
         spot.avgRating = avgRating;
-        spot.previewImage = previewImage;
+        if (previewImages) {
+            spot.previewImage = previewImages.url
+        }
 
         spots.push(spot)
     }
@@ -93,13 +92,11 @@ router.get('/current', async (req, res, next) => {
 
             const avgRating = reviewsSum / reviewsCount;
 
-            const previewImage = await SpotImage.findByPk(spot.id, {
-                attributes: ['url']
-            })
+            const previewImages = await SpotImage.findByPk(spot.id)
 
             spot = spot.toJSON();
             spot.avgRating = avgRating;
-            spot.previewImage = await previewImage;
+            spot.previewImage =  previewImages.url
 
             spots.push(spot)
         }
@@ -230,7 +227,32 @@ async (req, res, next) => {
     res.json(resImage);
 });
 
+router.put('/:spotId',
+authenticateUser, authorizeUser, validateSpot,
+async (req, res, next) => {
+    const { address, city, state, country, lat, lng, name, description, price } = req.body;
 
+    const spot = await Spot.findByPk(req.params.spotId);
+
+    spot.address = address || spot.address;
+    spot.city = city || spot.city;
+    spot.state = state || spot.state;
+    spot.country = country || spot.country;
+    spot.lat = lat || spot.lat;
+    spot.lng = lng || spot.lng;
+    spot.name = name || spot.name;
+    spot.description = description || spot.description;
+    spot.price = price;
+
+    spot.validateSpot;
+
+    spot.save();
+
+
+    res.json(spot)
+
+}
+)
 
 router.delete('/:spotId',
 authenticateUser, authorizeUser,
