@@ -54,6 +54,38 @@ router.get('/current', authenticateUser, async (req, res, next) => {
     }
 
     res.json({"Bookings": resBookings})
+});
+
+router.put('/:bookingId', authenticateUser, async (req, res, next) => {
+    const { bookingId } = req.params;
+    const { user } = req;
+    let { startDate, endDate } = req.body;
+
+    startDate = Date.parse(startDate);
+    endDate = Date.parse(endDate);
+
+    if (endDate < startDate) {
+        const err = new Error("Bad Request");
+
+        err.title = "Body validation errors"
+        err.errors = { message: "endDate cannot be on or before startDate"};
+        err.status = 400;
+
+        next(err);
+    }
+
+    const booking = await Booking.findByPk(bookingId);
+
+    if (booking) {
+        if(booking.userId != user.id) {
+            return res.status(403).json({message: "Forbidden"})
+        }
+
+        if (Date.parse(booking.endDate) < Date.now()) {
+            return res.status(403).json({message: "Past bookings can't be modified"})
+        }
+
+    } else { return res.status(404).json({message: "Booking couldn't be found"})}
 })
 
 
