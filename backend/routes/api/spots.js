@@ -379,7 +379,7 @@ async (req, res, next) => {
             err.errors = { message: "endDate cannot be on or before startDate"};
             err.status = 400;
 
-            next(err);
+            return next(err);
         };
 
         const bookings = await Booking.findAll({
@@ -420,7 +420,7 @@ async (req, res, next) => {
             endDate
         });
 
-        res.json(newBooking)
+        return res.json(newBooking)
 
     } else { return res.status(404).json({message: "Spot couldn't be found"})}
 
