@@ -343,6 +343,78 @@ async (req, res, next) => {
 
 });
 
+const validateBooking = [
+    check('startDate')
+      .exists({ checkFalsy: true })
+      .notEmpty()
+      .isISO8601()
+      .withMessage('Start date is required'),
+    check('endDate')
+      .exists({ checkFalsy: true })
+      .notEmpty()
+      .isISO8601()
+      .withMessage('End date is required'),
+    handleValidationErrors
+  ];
+
+router.post('/:spotId/bookings',
+authenticateUser, validateBooking,
+async (req, res, next) => {
+    const { spotId } = req.params;
+    const { user } = req;
+    let { startDate, endDate } = req.body;
+    const spot = await Spot.findByPk(spotId);
+    startDate = Date.parse(startDate);
+    endDate = Date.parse(endDate)
+
+    if (spot) {
+        if (endDate < startDate) {
+            const err = new Error("Bad Request");
+
+            err.title = "Body validation errors"
+            err.errors = { message: "endDate cannot be on or before startDate"};
+            err.status = 400;
+
+            next(err);
+        }
+
+        const bookings = await Booking.findAll({
+            where: {
+                spotId
+            }
+        });
+
+        for (let i = 0; i < bookings.length; i++) {
+            const booking = bookings[i];
+            const bookingStart = Date.parse(booking.startDate);
+            const bookingEnd = Date.parse(booking.endDate);
+
+            if ((startDate >= bookingStart && startDate <= bookingEnd) || (endDate <= bookingEnd && endDate >= bookingStart)) {
+                const err = new Error("Sorry, this spot is already booked for the specified dates");
+
+                err.status = 403;
+                err.title = "Booking conflict"
+
+                if (startDate >= bookingStart && startDate <= bookingEnd) {
+                    err.errors = {"startDate": "Start date conflicts with an existing booking"}
+                };
+
+                if (endDate <= bookingEnd && endDate >= bookingStart) {
+                    if (err.errors) {
+                        err.errors["endDate"] = "End date conflicts with an existing booking"
+                    } else {err.errors = {"endDate": "End date conflicts with an existing booking"}}
+                }
+
+                next(err)
+            }
+
+
+        }
+
+    } else { return res.status(404).json({message: "Spot couldn't be found"})}
+
+})
+
 router.put('/:spotId',
 authenticateUser, authorizeUser, validateSpot,
 async (req, res, next) => {
