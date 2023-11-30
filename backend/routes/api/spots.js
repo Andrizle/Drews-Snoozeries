@@ -376,7 +376,7 @@ async (req, res, next) => {
             err.status = 400;
 
             next(err);
-        }
+        };
 
         const bookings = await Booking.findAll({
             where: {
@@ -389,7 +389,7 @@ async (req, res, next) => {
             const bookingStart = Date.parse(booking.startDate);
             const bookingEnd = Date.parse(booking.endDate);
 
-            if ((startDate >= bookingStart && startDate <= bookingEnd) || (endDate <= bookingEnd && endDate >= bookingStart)) {
+            if ((startDate >= bookingStart && startDate <= bookingEnd) || (endDate <= bookingEnd && endDate >= bookingStart) || (startDate <= bookingStart && endDate >= bookingEnd)) {
                 const err = new Error("Sorry, this spot is already booked for the specified dates");
 
                 err.status = 403;
@@ -403,13 +403,20 @@ async (req, res, next) => {
                     if (err.errors) {
                         err.errors["endDate"] = "End date conflicts with an existing booking"
                     } else {err.errors = {"endDate": "End date conflicts with an existing booking"}}
-                }
+                };
 
-                next(err)
-            }
+                return next(err)
+            };
+        };
 
+        const newBooking = await Booking.create({
+            spotId: spot.id,
+            userId: user.id,
+            startDate,
+            endDate
+        });
 
-        }
+        res.json(newBooking)
 
     } else { return res.status(404).json({message: "Spot couldn't be found"})}
 
