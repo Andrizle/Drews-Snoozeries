@@ -124,6 +124,29 @@ router.put('/:bookingId', authenticateUser, async (req, res, next) => {
         return res.json(booking);
 
     } else { return res.status(404).json({message: "Booking couldn't be found"})}
+});
+
+router.delete('/:bookingId', authenticateUser, async (req, res, next) => {
+    const { bookingId } = req.params;
+    const { user } = req;
+    const booking = await Booking.findByPk(bookingId);
+
+    if (booking) {
+        if (booking.userId == user.id) {
+            const startDate = Date.parse(booking.startDate);
+            const endDate = Date.parse(booking.endDate);
+
+            if (startDate < Date.now()) {
+                return res.status(403).json({message: "Bookings that have been started can't be deleted"})
+            }
+
+            await booking.destroy();
+
+            return res.json({message: "Successfully deleted"})
+        } else { return res.status(403).json({message: "Forbidden"})}
+
+
+    } else { return res.status(404).json({message:"Booking couldn't be found"})}
 })
 
 
