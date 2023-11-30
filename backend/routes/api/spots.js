@@ -368,6 +368,10 @@ async (req, res, next) => {
     endDate = Date.parse(endDate)
 
     if (spot) {
+        if (spot.ownerId == user.id) {
+            return res.status(403).json({message: "Forbidden"})
+        }
+
         if (endDate < startDate) {
             const err = new Error("Bad Request");
 
