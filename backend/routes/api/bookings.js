@@ -53,7 +53,7 @@ router.get('/current', authenticateUser, async (req, res, next) => {
         resBookings.push(booking);
     }
 
-    res.json({"Bookings": resBookings})
+    return res.json({"Bookings": resBookings})
 });
 
 router.put('/:bookingId', authenticateUser, async (req, res, next) => {
@@ -71,7 +71,7 @@ router.put('/:bookingId', authenticateUser, async (req, res, next) => {
         err.errors = { message: "endDate cannot be on or before startDate"};
         err.status = 400;
 
-        next(err);
+        return next(err);
     }
 
     const booking = await Booking.findByPk(bookingId);

@@ -1,5 +1,5 @@
 const express = require('express')
-const { Op } = require('sequelize');
+const { Op, QueryError } = require('sequelize');
 
 const { setTokenCookie, restoreUser } = require('../../utils/auth');
 const { check } = require('express-validator');
@@ -40,11 +40,139 @@ const spotExists = async (req, res, next) => {
     } else {
         return res.status(404).json({"message": "Spot couldn't be found"})
     }
+};
+
+const validateReqQuery = (req, res, next) => {
+    let { page, size, minLat, maxLat, minLng, maxLng, minPrice, maxPrice } = req.query;
+    const errors = {}
+
+    if (page){
+        if (!Number.isInteger(parseInt(page))) {
+            errors.page = "Page must be an integer"
+        }
+
+        if (page < 1) {
+            errors.page = "Page must be greater than or equal to 1"
+        }
+
+        if (page > 10) {
+            errors.page = "Page must be less than or equal to 10"
+        }
+    }
+
+    if (size) {
+        if (!Number.isInteger(parseInt(size))) {
+            errors.size = "Size must be an integer"
+        }
+
+        if (size < 1) {
+            errors.size = "Size must be greater than or equal to 1"
+        }
+
+        if (size > 10) {
+            errors.size = "Size must be less than or equal to 20"
+        }
+    }
+
+    if (minLat || maxLat) {
+        if (minLat < -90 || minLat > 90) {
+            errors.minLat = "Minimum latitude is invalid"
+        }
+
+        if (maxLat < -90 || maxLat > 90) {
+            errors.maxLat = "Maximum latitude is invalid"
+        }
+    };
+
+    if (minLng || maxLng) {
+        if (minLng < -180 || minLng > 180) {
+            errors.minLng = "Minimum latitude is invalid"
+        }
+
+        if (maxLng < -180 || maxLng > 180) {
+            errors.maxLng = "Maximum latitude is invalid"
+        }
+    };
+
+    if (minPrice || maxPrice) {
+        if (Number.isInteger(minPrice)) {
+            errors.minPrice = "Minimum price is invalid"
+        }
+        if (minPrice < 0) {
+            errors.minPrice = "Minimum price must be greater than or equal to 0"
+        }
+
+        if (Number.isInteger(maxPrice)) {
+            errors.maxPrice = "Maximum price is invalid"
+        }
+        if (maxPrice < 0) {
+            errors.maxPrice = "Maximum price must be greater than or equal to 0"
+        }
+    };
+
+    if (Object.keys(errors).length) {
+        const err = new Error("Bad Request");
+
+        err.status = 400;
+        err.title = "Query parameter validation errors";
+        err.errors = errors
+
+        next(err)
+    } else { next() }
+}
+
+ const createQueryObj = (reqQuery) => {
+    let { minLat, maxLat, minLng, maxLng, minPrice, maxPrice } = reqQuery;
+    let query = {
+        where: {}
+    }
+
+    if (minLat && maxLat) {
+        query.where.lat = {[Op.between]: [minLat, maxLat]}
+    } else if (minLat) {
+        query.where.lat = {[Op.gt]: [minLat]}
+    } else if (maxLat) {
+        query.where.lat = {[Op.lt]: [maxLat]}
+    };
+
+    if (minLng && maxLng) {
+        query.where.lng = {[Op.between]: [minLng, maxLng]}
+    } else if (minLng) {
+        query.where.lng = {[Op.gt]: [minLng]}
+    } else if (maxLng) {
+        query.where.lng = {[Op.lt]: [maxLng]}
+    };
+
+    if (minPrice && maxPrice) {
+        query.where.price = {[Op.between]: [minPrice, maxPrice]}
+    } else if (minPrice) {
+        query.where.price = {[Op.gt]: [minPrice]}
+    } else if (maxPrice) {
+        query.where.price = {[Op.lt]: [maxPrice]}
+    };
+
+    return query;
+
+ }
+
+const setPagination = (reqQuery) => {
+    let { page, size } = reqQuery;
+    let pagination = {};
+
+    page = page || 1;
+    size = size || 20;
+    pagination.limit = size;
+    pagination.offset = size * (page - 1);
+
+    return pagination;
 }
 
 const defaultSpots = async (req, res, next) => {
+    const { size, page } = req.query;
     const spots = []
-    const preSpots = await Spot.findAll();
+    const pagination = setPagination(req.query);
+    const query = createQueryObj(req.query)
+    const preSpots = await Spot.findAll({...query, ...pagination});
 
     for (let i = 0; i < preSpots.length; i++) {
         let spot = preSpots[i];
@@ -62,7 +190,11 @@ const defaultSpots = async (req, res, next) => {
 
         const avgRating = reviewsSum / reviewsCount;
 
-        const previewImages = await SpotImage.findByPk(spot.id)
+        const previewImages = await SpotImage.findByPk(spot.id, {
+            where: {
+                preview: true
+            }
+        })
 
         spot = spot.toJSON();
         spot.avgRating = avgRating;
@@ -73,10 +205,10 @@ const defaultSpots = async (req, res, next) => {
         spots.push(spot)
     }
 
-    return res.json({spots})
+    return res.json({Spots: spots, page, size})
 }
 
-router.get('/', defaultSpots);
+router.get('/', validateReqQuery, defaultSpots);
 
 router.get('/current', async (req, res, next) => {
     const { user } = req;
@@ -181,7 +313,7 @@ router.get('/:spotId/reviews', async (req, res, next) => {
     });
 
     if (reviews.length) {
-        res.json({"Reviews": reviews});
+        return res.json({"Reviews": reviews});
     } else { res.status(404).json({"message": "Spot couldn't be found"})}
 
 });
@@ -276,7 +408,7 @@ router.post('/', authenticateUser, validateSpot, async (req, res, next) => {
 
         await newSpot.save();
 
-        res.status(201).json(newSpot);
+        return res.status(201).json(newSpot);
 
 
 });
@@ -339,7 +471,7 @@ async (req, res, next) => {
         }
     }
 
-    res.status(201).json(newReview);
+    return res.status(201).json(newReview);
 
 });
 
