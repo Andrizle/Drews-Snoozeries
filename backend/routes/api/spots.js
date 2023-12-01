@@ -240,7 +240,9 @@ router.get('/current', async (req, res, next) => {
 
             spot = spot.toJSON();
             spot.avgRating = avgRating;
-            spot.previewImage =  previewImages.url
+            if (previewImages) {
+                spot.previewImage =  previewImages.url
+            }
 
             spots.push(spot)
         }
@@ -450,13 +452,6 @@ async (req, res, next) => {
     const { spotId } = req.params;
     const { user } = req;
 
-    const newReview = await Review.create({
-        spotId,
-        userId: user.id,
-        review,
-        stars
-    });
-
     const spotReviews = await Review.findAll({
         where: {
             spotId
@@ -470,6 +465,13 @@ async (req, res, next) => {
             return res.status(500).json({"message": "User already has a review for this spot"})
         }
     }
+
+    const newReview = await Review.create({
+        spotId,
+        userId: user.id,
+        review,
+        stars
+    });
 
     return res.status(201).json(newReview);
 
@@ -504,7 +506,7 @@ async (req, res, next) => {
             return res.status(403).json({message: "Forbidden"})
         }
 
-        if (endDate < startDate) {
+        if (endDate <= startDate) {
             const err = new Error("Bad Request");
 
             err.title = "Body validation errors"

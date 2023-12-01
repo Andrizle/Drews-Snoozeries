@@ -64,7 +64,7 @@ router.put('/:bookingId', authenticateUser, async (req, res, next) => {
     startDate = Date.parse(startDate);
     endDate = Date.parse(endDate);
 
-    if (endDate < startDate) {
+    if (endDate <= startDate) {
         const err = new Error("Bad Request");
 
         err.title = "Body validation errors"
@@ -87,7 +87,8 @@ router.put('/:bookingId', authenticateUser, async (req, res, next) => {
 
         const bookings = await Booking.findAll({
             where: {
-                spotId: booking.spotId
+                spotId: booking.spotId,
+                id: {[Op.notIn]: [booking.id]}
             }
         });
 
