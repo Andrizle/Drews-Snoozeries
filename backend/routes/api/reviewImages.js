@@ -32,7 +32,7 @@ const authorizeUser = async (req, res, next) => {
         if (review.userId == user.id) {
             next()
         } else { return res.status(403).json({"message": "Forbidden"})}
-    } else { return res.status(404).json({"message": "Spot couldn't be found"})}
+    } else { return res.status(404).json({"message": "Image couldn't be found"})}
 };
 
 router.delete('/:imageId',

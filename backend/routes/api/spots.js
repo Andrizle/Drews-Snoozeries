@@ -12,7 +12,7 @@ const authenticateUser = async (req, res, next) => {
     const { user } = req;
 
     if (user) {
-        next()
+        return next()
     } else {
         return res.status(401).json({"message": "Authentication required"})
     }
@@ -25,7 +25,7 @@ const authorizeUser = async (req, res, next) => {
     const spot = await Spot.findByPk(spotId);
     if (spot) {
         if (spot.ownerId == user.id) {
-            next()
+            return next()
         } else { return res.status(403).json({"message": "Forbidden"})}
     } else { return res.status(404).json({"message": "Spot couldn't be found"})}
 };
@@ -36,7 +36,7 @@ const spotExists = async (req, res, next) => {
     const spot = await Spot.findByPk(spotId);
 
     if (spot) {
-        next()
+        return next()
     } else {
         return res.status(404).json({"message": "Spot couldn't be found"})
     }
@@ -117,7 +117,7 @@ const validateReqQuery = (req, res, next) => {
         err.title = "Query parameter validation errors";
         err.errors = errors
 
-        next(err)
+        return next(err)
     } else { next() }
 }
 
@@ -247,7 +247,7 @@ router.get('/current', async (req, res, next) => {
             spots.push(spot)
         }
 
-        return res.json({spots})
+        return res.json({Spots: spots})
     } else {
         return res.status(401).json({"message": "Authentication required"})
     }
