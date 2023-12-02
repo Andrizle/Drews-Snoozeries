@@ -242,7 +242,7 @@ router.get('/current', async (req, res, next) => {
             spot.avgRating = avgRating;
             if (previewImages) {
                 spot.previewImage =  previewImages.url
-            }
+            } else { spot.previewImage = "This spot has no preview image"}
 
             spots.push(spot)
         }
@@ -413,11 +413,11 @@ router.post('/', authenticateUser, validateSpot, async (req, res, next) => {
             city,
             state,
             country,
-            lat,
-            lng,
+            lat: Number.parseFloat(lat),
+            lng: Number.parseFloat(lng),
             name,
             description,
-            price
+            price: Number.parseFloat(price)
         });
 
         await newSpot.validate();
@@ -481,7 +481,7 @@ async (req, res, next) => {
     }
 
     const newReview = await Review.create({
-        spotId,
+        spotId: Number.parseInt(spotId),
         userId: user.id,
         review,
         stars
