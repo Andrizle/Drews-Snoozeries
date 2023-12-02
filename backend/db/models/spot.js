@@ -55,12 +55,12 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     lat:{
-      type: DataTypes.FLOAT,
+      type: DataTypes.DOUBLE,
       allowNull: false
 
     },
     lng:{
-      type: DataTypes.FLOAT,
+      type: DataTypes.DOUBLE,
       allowNull: false
     },
     name: {
@@ -68,7 +68,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     description: DataTypes.STRING,
-    price: DataTypes.FLOAT
+    price: DataTypes.DOUBLE
   }, {
     sequelize,
     modelName: 'Spot',

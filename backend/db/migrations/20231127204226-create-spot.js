@@ -40,11 +40,11 @@ module.exports = {
         allowNull: false
       },
       lat: {
-        type: Sequelize.FLOAT,
+        type: Sequelize.DOUBLE,
         allowNull: false
       },
       lng: {
-        type: Sequelize.FLOAT,
+        type: Sequelize.DOUBLE,
         allowNull: false
       },
       name: {
@@ -55,7 +55,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       price: {
-        type: Sequelize.FLOAT,
+        type: Sequelize.DOUBLE,
         allowNull: false
       },
       createdAt: {
