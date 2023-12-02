@@ -190,9 +190,10 @@ const defaultSpots = async (req, res, next) => {
 
         const avgRating = reviewsSum / reviewsCount;
 
-        const previewImages = await SpotImage.findByPk(spot.id, {
+        const previewImages = await SpotImage.findOne({
             where: {
-                preview: true
+                preview: true,
+                spotId: spot.id
             }
         })
 
