@@ -14,15 +14,21 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       Spot.hasMany(models.Booking, {
-        foreignKey: 'spotId'
+        foreignKey: 'spotId',
+        onDelete: 'CASCADE',
+        hooks: true
       });
 
       Spot.hasMany(models.SpotImage, {
-        foreignKey: 'spotId'
+        foreignKey: 'spotId',
+        onDelete: 'CASCADE',
+        hooks: true
       });
 
       Spot.hasMany(models.Review, {
-        foreignKey: 'spotId'
+        foreignKey: 'spotId',
+        onDelete: 'CASCADE',
+        hooks: true
       });
 
       Spot.belongsTo(models.User, {
@@ -50,12 +56,11 @@ module.exports = (sequelize, DataTypes) => {
     },
     lat:{
       type: DataTypes.DECIMAL,
-      unique: true,
       allowNull: false
+
     },
     lng:{
       type: DataTypes.DECIMAL,
-      unique: true,
       allowNull: false
     },
     name: {

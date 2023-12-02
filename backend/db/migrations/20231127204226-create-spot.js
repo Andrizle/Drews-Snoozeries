@@ -71,8 +71,15 @@ module.exports = {
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       }
     }, options);
+
+    await queryInterface.addConstraint('Spots', {
+      fields: ['lat', 'lng'],
+      type: 'unique',
+      name: 'lat_lng_unique_constraint'
+    }, options);
   },
   async down(queryInterface, Sequelize) {
+    await queryInterface.removeConstraint('Spots', 'lat_lng_unique_constraint');
     options.tableName = 'Spots'
     return queryInterface.dropTable(options);
   }

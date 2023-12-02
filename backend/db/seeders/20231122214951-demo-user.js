@@ -20,15 +20,15 @@ module.exports = {
       },
       {
         email: 'user1@user.io',
-        firstName: 'first',
-        lastName: 'last',
+        firstName: 'Billy',
+        lastName: 'Bob',
         username: 'FakeUser1',
         hashedPassword: bcrypt.hashSync('password2')
       },
       {
         email: 'user2@user.io',
-        firstName: 'first',
-        lastName: 'last',
+        firstName: 'Emma',
+        lastName: 'Jones',
         username: 'FakeUser2',
         hashedPassword: bcrypt.hashSync('password3')
       },
@@ -38,6 +38,48 @@ module.exports = {
         lastName: 'Madrigal',
         username: 'Andrizle',
         hashedPassword: bcrypt.hashSync('password4')
+      },
+      {
+        email: 'user5@user.io',
+        firstName: 'Darion',
+        lastName: 'Johnson',
+        username: 'FakeUser5',
+        hashedPassword: bcrypt.hashSync('password5')
+      },
+      {
+        email: 'prettygirl@user.io',
+        firstName: 'Isabella',
+        lastName: 'Nixon',
+        username: 'princess',
+        hashedPassword: bcrypt.hashSync('password6')
+      },
+      {
+        email: 'audlazna@user.io',
+        firstName: 'Jacob',
+        lastName: 'Anzaldua',
+        username: 'Audlazna',
+        hashedPassword: bcrypt.hashSync('password7')
+      },
+      {
+        email: 'theBwandMan@user.io',
+        firstName: 'Bwandon',
+        lastName: 'Bwandonson',
+        username: 'bwandonator',
+        hashedPassword: bcrypt.hashSync('password8')
+      },
+      {
+        email: '9lives@user.io',
+        firstName: 'Tony',
+        lastName: 'Bologna',
+        username: 'delulu',
+        hashedPassword: bcrypt.hashSync('password9')
+      },
+      {
+        email: 'theGame@user.io',
+        firstName: 'Jayceon',
+        lastName: 'Taylor',
+        username: 'TheGame',
+        hashedPassword: bcrypt.hashSync('password10')
       }
     ], { validate: true });
   },
@@ -46,7 +88,7 @@ module.exports = {
     options.tableName = 'Users';
     const Op = Sequelize.Op;
     return queryInterface.bulkDelete(options, {
-      username: { [Op.in]: ['Demo-lition', 'FakeUser1', 'FakeUser2'] }
+      username: { [Op.in]: ['Demo-lition', 'FakeUser1', 'FakeUser2', 'Andrizle', 'bwandonator', 'delulu', 'princess', 'TheGame', 'Audlazna', 'FakeUser5'] }
     }, {});
   }
 };

@@ -200,7 +200,7 @@ const defaultSpots = async (req, res, next) => {
         spot.avgRating = avgRating;
         if (previewImages) {
             spot.previewImage = previewImages.url
-        }
+        } else {spot.previewImage = "This spot has no preview image"}
 
         spots.push(spot)
     }
@@ -371,12 +371,20 @@ const validateSpot = [
       .withMessage('Country is required'),
     check('lat')
       .exists({ checkFalsy: true })
-      .isDecimal()
-      .withMessage('Latitude is not valid'),
+      .custom(lat => {
+        if (lat < -90 || lat > 90) {
+            throw new Error('Latitude is not valid')
+        }
+        return true
+      }),
     check('lng')
       .exists({ checkFalsy: true })
-      .isDecimal()
-      .withMessage('Longitude is not valid'),
+      .custom(lng => {
+        if (lng < -180 || lng > 180) {
+            throw new Error('Longitude is not valid')
+        }
+        return true
+      }),
     check('name')
       .exists({ checkFalsy: true })
       .isLength({max: 50})
@@ -386,7 +394,12 @@ const validateSpot = [
       .withMessage('Description is required'),
     check('price')
       .exists({ checkFalsy: true })
-      .withMessage('Price per day is required'),
+      .custom((price) => {
+        if (price < 0) {
+            throw new Error('Price per day is required')
+        }
+        return true
+      }),
     handleValidationErrors
   ];
 
