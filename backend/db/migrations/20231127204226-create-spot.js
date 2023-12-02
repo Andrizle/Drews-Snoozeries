@@ -72,14 +72,14 @@ module.exports = {
       }
     }, options);
 
-    await queryInterface.addConstraint('Spots', {
-      fields: ['lat', 'lng'],
-      type: 'unique',
-      name: 'lat_lng_unique_constraint'
-    }, options);
+    // await queryInterface.addConstraint('Spots', {
+    //   fields: ['lat', 'lng'],
+    //   type: 'unique',
+    //   name: 'lat_lng_unique_constraint'
+    // }, options);
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.removeConstraint('Spots', 'lat_lng_unique_constraint');
+    // await queryInterface.removeConstraint('Spots', 'lat_lng_unique_constraint');
     options.tableName = 'Spots'
     return queryInterface.dropTable(options);
   }
