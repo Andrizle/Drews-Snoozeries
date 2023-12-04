@@ -237,7 +237,11 @@ router.get('/current', async (req, res, next) => {
 
             const avgRating = reviewsSum / reviewsCount;
 
-            const previewImages = await SpotImage.findByPk(spot.id)
+            const previewImages = await SpotImage.findByPk(spot.id, {
+                where: {
+                    
+                }
+            })
 
             spot = spot.toJSON();
             spot.avgRating = avgRating;
