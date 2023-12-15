@@ -4,15 +4,6 @@ const LOGIN = 'session/login'
 
 const LOGOUT = 'session/logout'
 
-const SIGNUP = 'session/signup'
-
-function signup(user) {
-    return {
-        type: SIGNUP,
-        user
-    }
-}
-
 function login(user) {
     return {
         type: LOGIN,
@@ -37,7 +28,7 @@ export const signupUser = user => async dispatch => {
     if (response.ok) {
         const data = await response.json();
 
-        dispatch(signup(data.user));
+        dispatch(login(data.user));
 
         return data.user
     }
@@ -91,13 +82,8 @@ const initialState = {user:null}
 
 const userReducer = (state = initialState, action) => {
     switch(action.type) {
-        case SIGNUP: {
-            const currentUser = {...state, user: {...action.user}}
-
-            return currentUser
-        }
         case LOGIN: {
-            const currentUser = {...state, user:{...action.user}}
+            const currentUser = {...state, user: action.user}
 
             return currentUser
         }
