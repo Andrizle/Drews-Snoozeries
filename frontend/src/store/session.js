@@ -4,6 +4,15 @@ const LOGIN = 'session/login'
 
 const LOGOUT = 'session/logout'
 
+const SIGNUP = 'session/signup'
+
+function signup(user) {
+    return {
+        type: SIGNUP,
+        user
+    }
+}
+
 function login(user) {
     return {
         type: LOGIN,
@@ -15,6 +24,25 @@ const logout = () => ({
     type: LOGOUT
 })
 
+export const signupUser = user => async dispatch => {
+    const {email, username, password, firstName, lastName } = user;
+    const response = await csrfFetch('/api/users', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            email, username, password, firstName, lastName
+        })
+    });
+
+    if (response.ok) {
+        const data = await response.json();
+
+        dispatch(signup(data.user));
+
+        return data.user
+    }
+
+}
 
 export const userLogin = user => async dispatch => {
     const {credential, password} = user
@@ -52,10 +80,22 @@ export const userLogout = () => async dispatch => {
     }
 }
 
+export const restoreUser = () => async (dispatch) => {
+    const response = await csrfFetch("/api/session");
+    const data = await response.json();
+    dispatch(login(data.user));
+    return response;
+  };
+
 const initialState = {user:null}
 
 const userReducer = (state = initialState, action) => {
     switch(action.type) {
+        case SIGNUP: {
+            const currentUser = {...state, user: {...action.user}}
+
+            return currentUser
+        }
         case LOGIN: {
             const currentUser = {...state, user:{...action.user}}
 
