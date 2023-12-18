@@ -15,3 +15,21 @@
     justify-content: space-between;
     margin: 5px;
 }
+
+.spotTile {
+    color: white;
+    text-decoration: none;
+    visibility: visible;
+}
+
+.tooltip-text {
+    visibility: hidden;
+    background-color: gray;
+    border-radius: 5px;
+    color: rgb(22, 21, 21);
+    text-align: center;
+}
+
+.tooltip:hover .tooltip-text {
+    visibility: visible;
+}

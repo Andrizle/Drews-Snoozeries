@@ -7,7 +7,6 @@ import './SpotList.css'
 const SpotsList = () => {
     const dispatch = useDispatch();
     const spots = Object.values(useSelector(state => state.spots))
-    console.log(spots)
 
     useEffect(() => {
         dispatch(fetchSpots());
@@ -18,18 +17,19 @@ const SpotsList = () => {
             <h1>Spots List</h1>
             <div className='spotContainer'>
                 {spots.map(spot => (
-                <div className='spots' key={spot.id}>
-                        <Link to={`/api/spots/${spot.id}`} key={spot.id}>
+                <div className='spots tooltip' key={spot.id}>
+                        <Link to={`/api/spots/${spot.id}`} className='spotTile' key={spot.id}>
                             <img src={spot.previewImage} alt="pic of spot" />
+                            <span className='tooltip-text'>{spot.name}</span>
+                            <div className='cityRatings'>
+                                <span>{spot.city}, {spot.state}</span>
+                                {(typeof spot.avgRating === "number") ?
+                                (<span>{spot.avgRating}</span>) :
+                                (<span>New</span>)
+                                }
+                            </div>
+                                <p>{spot.price}/night</p>
                         </Link>
-                        <div className='cityRatings'>
-                            <span>{spot.city}, {spot.state}</span>
-                            {(typeof spot.avgRating === "number") ?
-                            (<span>{spot.avgRating}</span>) :
-                            (<span>New</span>)
-                            }
-                        </div>
-                            <p>{spot.price}/night</p>
                 </div>
 
                 ))}
