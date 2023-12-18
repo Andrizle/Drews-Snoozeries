@@ -1,0 +1,17 @@
+.spotContainer {
+    border: 2px;
+    border-color: white;
+    display: grid;
+    grid: auto-flow / repeat(4, 1fr);
+    margin: 10px;
+}
+
+.spots {
+    margin: 10px;
+}
+
+.cityRatings {
+    display: flex;
+    justify-content: space-between;
+    margin: 5px;
+}

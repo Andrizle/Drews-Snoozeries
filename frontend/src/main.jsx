@@ -6,6 +6,7 @@ import { Provider } from 'react-redux';
 import configureStore from './store';
 import { restoreCSRF, csrfFetch } from './store/csrf';
 import * as sessionActions from './store/session';
+import * as spotActions from './store/spots';
 import { Modal, ModalProvider } from './context/Modal/';
 
 const store = configureStore();
@@ -24,6 +25,7 @@ if (process.env.NODE_ENV !== 'production') {
 
   window.store = store;
   window.sessionActions = sessionActions
+  window.spotActions = spotActions
 }
 
 
