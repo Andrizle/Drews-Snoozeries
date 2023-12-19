@@ -8,7 +8,7 @@ function Navigation({ isLoaded }) {
 
   return (
     <div className='navBar'>
-        <NavLink className='navLink' id='homeButton' exact to="/">Home</NavLink>
+        <NavLink className='navLink' id='homeButton' to="/">Home</NavLink>
         <li>
           {isLoaded && (
           <ProfileButton className='navLink' user={sessionUser} />

@@ -1,0 +1,58 @@
+.imgContainer {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.spotImageGrid {
+    display: grid;
+    grid: 1fr 1fr / 1fr 1fr
+}
+
+#bigSpotImg {
+    height: 500px;
+    border: 1px solid white;
+}
+
+#spotTextContainer {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+}
+
+.reservationContainer {
+    border: 1px solid white;
+    border-radius: 5px;
+    padding: 0px 15px;
+}
+
+.priceReviews {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 15px;
+}
+
+.price {
+    display: inline-flex;
+    margin: 5px;
+    margin-block-start: 0
+}
+
+.ratings {
+    margin-top: 12px;
+}
+
+.avgRating {
+    margin-left: 5px;
+}
+
+.dotDivider {
+    position: relative;
+    bottom: 4px;
+}
+
+#reserveButton {
+    background-color: rgb(0, 128, 96);
+    color: white;
+    height: 50px;
+    margin: 10px 5%;
+    width: 90%;
+}

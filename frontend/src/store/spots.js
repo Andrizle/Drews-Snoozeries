@@ -36,7 +36,6 @@ export const fetchSpot = spotId => async dispatch => {
 
     if (response.ok) {
         const spot = await response.json()
-        console.log(spot)
         dispatch(getSpot(spot))
 
         return spot
@@ -58,7 +57,8 @@ const spotReducer = (state = initialState, action) => {
             return newState
         }
         case LOAD_SPOT: {
-            return {...state, [action.spot.id]: action.spot}
+            const newState = {[action.spot.id]: action.spot}
+            return newState
         }
         default:
             return state

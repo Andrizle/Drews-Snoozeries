@@ -28,7 +28,7 @@ const SpotsList = () => {
                                 (<span>New</span>)
                                 }
                             </div>
-                                <p>{spot.price}/night</p>
+                                <p>{spot.price} night</p>
                         </Link>
                 </div>
 
