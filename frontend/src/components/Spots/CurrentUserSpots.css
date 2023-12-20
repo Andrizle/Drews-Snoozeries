@@ -1,0 +1,14 @@
+#addListing {
+    box-sizing: content-box;
+    display: flex;
+    margin: 20px;
+}
+
+.usersManageButtons{
+    display: flex;
+    justify-content: center;
+}
+
+.updateButton {
+    margin: 0 10px;
+}

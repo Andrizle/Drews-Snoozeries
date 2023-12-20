@@ -4,6 +4,8 @@ import * as sessionActions from '../../store/session';
 import OpenModalButton from '../OpenModalButton';
 import LoginFormModal from '../LoginFormModal';
 import SignupFormModal from '../SignupFormModal';
+import { NavLink } from 'react-router-dom';
+import './ProfileButton.css';
 
 function ProfileButton({ user }) {
   const dispatch = useDispatch();
@@ -44,15 +46,15 @@ function ProfileButton({ user }) {
       <button onClick={toggleMenu}>
         <i className="fas fa-user-circle" />
       </button>
-      <ul className={ulClassName} ref={ulRef}>
+      <div className={ulClassName} ref={ulRef}>
         {user ? (
           <>
-            <li>{user.username}</li>
-            <li>{user.firstName} {user.lastName}</li>
-            <li>{user.email}</li>
-            <li>
-              <button onClick={logout}>Log Out</button>
-            </li>
+            <div>Hello, {user.username}</div>
+            <div className='userEmail'>{user.email}</div>
+            <NavLink to="/spots/current" id='manageButton' onClick={closeMenu}>Manage Spots</NavLink>
+            <div>
+              <button onClick={logout} className='logoutButton'>Log Out</button>
+            </div>
           </>
         ) : (
           <>
@@ -72,7 +74,7 @@ function ProfileButton({ user }) {
             </li>
           </>
         )}
-      </ul>
+      </div>
     </>
   );
 }

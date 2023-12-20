@@ -10,10 +10,18 @@
     margin: 10px;
 }
 
+.spotPreviewImg {
+    border: solid white 1px;
+    height: 225px;
+}
+
 .cityRatings {
     display: flex;
     justify-content: space-between;
-    margin: 5px;
+}
+
+.fa-star {
+    margin-right: 5px;
 }
 
 .spotTile {

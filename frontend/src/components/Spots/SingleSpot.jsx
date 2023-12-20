@@ -2,13 +2,14 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { fetchSpot } from "../../store/spots";
+import SpotReviews from "../SpotReviews/SpotReviews";
 import './SingleSpot.css';
 
 export default function SingleSpot() {
     const dispatch = useDispatch();
     const { spotId } = useParams();
     const spot = useSelector(state => state.spots[spotId])
-    console.log(spot)
+    // console.log(spot)
 
     useEffect(() => {
             dispatch(fetchSpot(spotId))
@@ -34,9 +35,9 @@ export default function SingleSpot() {
                     <img src={spot.SpotImages[0]} alt="large image of spot from spotId" />
                 </div>
                 <div className="spotImageGrid">{spotImages.map(image => (
-                    image.url ?
+                    image ?
                     (<div key={image.id}><img src={image.url} alt="image of spot from spotId" /></div>) :
-                    <div>no image here</div>
+                    null
                 ))}
                 </div>
             </div>
@@ -49,17 +50,45 @@ export default function SingleSpot() {
                     <div className="priceReviews">
                         <span ><h2 className="price">${spot.price}</h2>night</span>
                         <div className="ratings">
-                            <i className="fas fa-star"></i>
-                            <span className="avgRating">{spot.avgRating}</span>
-                            <span className="dotDivider"> . </span>
-                            <span>{spot.numReviews} reviews</span>
+
+                            { typeof spot.avgRating !== 'string' ?
+                                (<>
+                                    <i className="fas fa-star"></i>
+                                    <span className="avgRating">{spot.avgRating}</span>
+                                    <span className="dotDivider"> . </span>
+                                    <span>{spot.numReviews}
+                                    {spot.numReviews === 1 ?
+                                        ' Review' :
+                                        ' Reviews'
+                                    }</span>
+                                </>) :
+                                (<span><i className="fas fa-star"></i>New</span>)
+                            }
+
                         </div>
                     </div>
-                    <button id="reserveButton" onClick={() => {
+                    <button className="bigButton" onClick={() => {
                         throw alert("Feature coming soon")
                     }}>Reserve</button>
                 </div>
-
+            </div>
+            <div className="spotReviews">
+                { typeof spot.avgRating !== 'string' ?
+                    (<>
+                        <h2>
+                            <i className="fas fa-star"></i>
+                            <span className="avgRating">{spot.avgRating}</span>
+                            <span className="dotDivider"> . </span>
+                            <span>{spot.numReviews}
+                            {spot.numReviews === 1 ?
+                                ' Review' :
+                                ' Reviews'
+                            }</span>
+                        </h2>
+                        <SpotReviews />
+                    </>) :
+                    (<span>Be the first to post a review!</span>)
+                }
             </div>
         </div>
     )

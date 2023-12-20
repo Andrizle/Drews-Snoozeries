@@ -188,7 +188,14 @@ const defaultSpots = async (req, res, next) => {
             }
         });
 
-        const avgRating = reviewsSum / reviewsCount;
+        let avgRating = reviewsSum / reviewsCount;
+
+        function roundWithPrecision(num, precision) {
+            const multiplier = Math.pow(10, precision);
+            return Math.round( num * multiplier ) / multiplier;
+        }
+
+        avgRating = roundWithPrecision(avgRating, 2)
 
         const previewImages = await SpotImage.findOne({
             where: {
@@ -235,11 +242,18 @@ router.get('/current', async (req, res, next) => {
                 }
             });
 
-            const avgRating = reviewsSum / reviewsCount;
+            let avgRating = reviewsSum / reviewsCount;
+
+            function roundWithPrecision(num, precision) {
+                const multiplier = Math.pow(10, precision);
+                return Math.round( num * multiplier ) / multiplier;
+            }
+
+            avgRating = roundWithPrecision(avgRating, 2)
 
             const previewImages = await SpotImage.findByPk(spot.id, {
                 where: {
-                    
+
                 }
             })
 
@@ -275,7 +289,14 @@ router.get('/:spotId', async (req, res, next) => {
             }
         });
 
-        const avgRating = reviewsSum / reviewsCount;
+        let avgRating = reviewsSum / reviewsCount;
+
+        function roundWithPrecision(num, precision) {
+            const multiplier = Math.pow(10, precision);
+            return Math.round( num * multiplier ) / multiplier;
+        }
+
+        avgRating = roundWithPrecision(avgRating, 2)
 
         spot = spot.toJSON();
 
@@ -317,7 +338,8 @@ router.get('/:spotId/reviews', async (req, res, next) => {
                     model: ReviewImage,
                     attributes: ['id', 'url']
                 }
-            ]
+            ],
+            // order: []
         });
 
 

@@ -1,0 +1,15 @@
+.userEmail {
+    margin-bottom: 10px;
+}
+
+#manageButton {
+    color: white;
+    border-bottom: solid white 1px;
+    border-top: solid white 1px;
+    padding: 5px;
+    text-decoration: none;
+}
+
+.logoutButton {
+    margin-top: 10px;
+}

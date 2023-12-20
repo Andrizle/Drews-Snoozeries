@@ -1,0 +1,28 @@
+#deleteModal {
+    background-color: #181a1b;
+}
+
+#deleteHeader {
+    background-color: rgb(129, 11, 11);
+}
+
+.deleteModalContent {
+    display: flex;
+    flex-direction: column;
+}
+
+#deleteConfirmText {
+    display: grid;
+    justify-content: center;
+    margin-block-start: 0;
+    margin: 20px;
+    width: 70%;
+}
+
+#deleteButton {
+    background-color: rgb(129, 11, 11);
+}
+
+#dontDeleteButton {
+    background-color: gray;
+}
