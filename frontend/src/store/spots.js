@@ -2,6 +2,7 @@ import { csrfFetch } from "./csrf"
 
 const LOAD_SPOTS = 'spots/getSpots'
 const LOAD_SPOT = 'spots/getSpot'
+const ADD_SPOT = 'spots/addSpot'
 const DELETE_SPOT = 'spots/deleteSpot'
 
 
@@ -16,6 +17,13 @@ function getSpots(spots) {
 function getSpot(spot) {
     return {
         type: LOAD_SPOT,
+        spot
+    }
+}
+
+function addSpot(spot) {
+    return{
+        type: ADD_SPOT,
         spot
     }
 }
@@ -51,6 +59,26 @@ export const fetchSpot = spotId => async dispatch => {
     }
 }
 
+export const createSpot = spot => async dispatch => {
+    try {
+        const response = await csrfFetch('/api/spots', {
+        method: 'POST',
+        headers: { "Content-Type": 'application/json'},
+        body: JSON.stringify(spot)
+    })
+
+    if (response.ok) {
+        const spot = await response.json()
+        dispatch(addSpot(spot))
+        return spot
+    }
+    } catch (response) {
+        const errors = await response.json()
+        return errors
+    }
+
+}
+
 export const seekAndDestroySpot = spot => async dispatch => {
     const response = await csrfFetch(`/api/spots/${spot.id}`, {
         method: 'DELETE'
@@ -79,6 +107,21 @@ const spotReducer = (state = initialState, action) => {
         case LOAD_SPOT: {
             const newState = {[action.spot.id]: action.spot}
             return newState
+        }
+        case ADD_SPOT: {
+            if (!state[action.spot.id]) {
+                const newState = {
+                ...state, [action.spot.id]: action.spot
+                }
+                return newState
+            }
+            return {
+                ...state,
+                [action.spot.id]: {
+                    ...state[action.spot.id],
+                    ...action.pokemon
+                }
+            }
         }
         case DELETE_SPOT: {
             const newState = {...state}

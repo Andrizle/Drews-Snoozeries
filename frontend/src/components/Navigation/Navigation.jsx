@@ -10,6 +10,7 @@ function Navigation({ isLoaded }) {
     <div className='navBar'>
         <NavLink className='navLink' id='homeButton' to="/">Home</NavLink>
         <div>
+          <NavLink className='navLink' to="/spots/new">Create A New Spot</NavLink>
           {isLoaded && (
           <ProfileButton className='navLink' user={sessionUser} />
       )}

@@ -1,0 +1,107 @@
+.errors {
+    color: rgb(165, 14, 14);
+}
+
+#createPage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#createTextContainer {
+    background-color: rgb(131, 122, 111);
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    margin-top: 15px;
+    padding: 20px;
+    width: 33%;
+}
+
+.createHeaders {
+    margin-block-start: 0;
+    margin-block-end: 0;
+}
+
+.createDescriptions {
+    margin-block-start: 0;
+    margin-block-end: 0.5em;
+}
+
+.createContainers {
+    border-bottom: solid white 1px;
+    border-top: solid white 1px;
+    padding-bottom: 20px;
+    padding-top: 10px;
+}
+
+.formInput {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.createInputs {
+    box-sizing: border-box;
+    display: flex;
+    width: 100%;
+}
+
+#cityState {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+#cityContainer {
+    display: flex;
+    flex-direction: column;
+    width: 120%;
+}
+
+#cityInput {
+    box-sizing: border-box;
+    width: 100%;
+}
+
+#stateContainer {
+    display: flex;
+    flex-direction: column;
+}
+
+#cityStateComma {
+    margin-right: 10px;
+    position: relative;
+    top: 23px;
+}
+
+#stateInput {
+    box-sizing: border-box;
+    width: 100%;
+}
+
+#descriptionInput {
+    height: 100px;
+    resize: none;
+    width: 100%;
+}
+
+#priceInputContainer {
+    display: flex;
+    flex-direction: row;
+}
+
+#priceInput {
+    margin-left: 10px;
+}
+
+#imageInputContainer {
+    border-bottom: solid white 1px;
+    padding-bottom: 10px;
+}
+
+.spotImages {
+    margin: 10px 0;
+}
