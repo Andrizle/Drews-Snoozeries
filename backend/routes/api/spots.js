@@ -396,29 +396,30 @@ const validateSpot = [
     check('country')
       .exists({ checkFalsy: true })
       .withMessage('Country is required'),
-    check('lat')
-      .exists({ checkFalsy: true })
-      .custom(lat => {
-        if (lat < -90 || lat > 90) {
-            throw new Error('Latitude is not valid')
-        }
-        return true
-      }),
-    check('lng')
-      .exists({ checkFalsy: true })
-      .custom(lng => {
-        if (lng < -180 || lng > 180) {
-            throw new Error('Longitude is not valid')
-        }
-        return true
-      }),
+    // check('lat')
+    //   .exists({ checkFalsy: true })
+    //   .custom(lat => {
+    //     if (lat < -90 || lat > 90) {
+    //         throw new Error('Latitude is not valid')
+    //     }
+    //     return true
+    //   }),
+    // check('lng')
+    //   .exists({ checkFalsy: true })
+    //   .custom(lng => {
+    //     if (lng < -180 || lng > 180) {
+    //         throw new Error('Longitude is not valid')
+    //     }
+    //     return true
+    //   }),
     check('name')
       .exists({ checkFalsy: true })
       .isLength({max: 50})
       .withMessage('Name must be less than 50 characters'),
     check('description')
       .exists({ checkFalsy: true })
-      .withMessage('Description is required'),
+      .isLength({min: 30})
+      .withMessage('Description needs 30 or more characters'),
     check('price')
       .exists({ checkFalsy: true })
       .custom((price) => {
