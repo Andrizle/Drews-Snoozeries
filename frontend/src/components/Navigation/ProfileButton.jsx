@@ -43,21 +43,21 @@ function ProfileButton({ user }) {
 
   return (
     <>
-      <button onClick={toggleMenu}>
+      <button onClick={toggleMenu} id='profileButton'>
         <i className="fas fa-user-circle" />
       </button>
       <div className={ulClassName} ref={ulRef}>
         {user ? (
-          <>
+          <div className='userDropDown'>
             <div>Hello, {user.username}</div>
             <div className='userEmail'>{user.email}</div>
             <NavLink to="/spots/current" id='manageButton' onClick={closeMenu}>Manage Spots</NavLink>
             <div>
               <button onClick={logout} className='logoutButton'>Log Out</button>
             </div>
-          </>
+          </div>
         ) : (
-          <>
+          <div className='userDropDown'>
             <li>
               <OpenModalButton
                 buttonText="Log In"
@@ -72,7 +72,7 @@ function ProfileButton({ user }) {
                 modalComponent={<SignupFormModal />}
               />
             </li>
-          </>
+          </div>
         )}
       </div>
     </>

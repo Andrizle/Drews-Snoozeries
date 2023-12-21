@@ -19,13 +19,13 @@ const SpotsList = () => {
                 {spots.map(spot => (
                 <div className='spots tooltip' key={spot.id}>
                         <Link to={`/spots/${spot.id}`} className='spotTile' key={spot.id}>
-                            <div className='spotPreviewImg'>
-                                <img src={spot.previewImage} alt="pic of spot" />
+                            <div className='spotPreview'>
+                                <img className='spotPreviewImg' src={spot.previewImage} alt="pic of spot" />
                             </div>
                             <span className='tooltip-text'>{spot.name}</span>
                             <div className='cityRatings'>
-                                <span>{spot.city}, {spot.state}</span>
-                                {(typeof spot.avgRating !== "string") ?
+                                <span className='cityState'>{spot.city}, {spot.state}</span>
+                                {(spot.avgRating) ?
                                 (<span><i className='fas fa-star'></i>{spot.avgRating}</span>) :
                                 (<span><i className="fas fa-star"></i>New</span>)
                                 }

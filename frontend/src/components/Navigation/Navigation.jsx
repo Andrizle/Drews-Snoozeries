@@ -9,11 +9,14 @@ function Navigation({ isLoaded }) {
   return (
     <div className='navBar'>
         <NavLink className='navLink' id='homeButton' to="/">Home</NavLink>
-        <div>
+        <div className='navRightSide'>
           <NavLink className='navLink' to="/spots/new">Create A New Spot</NavLink>
-          {isLoaded && (
-          <ProfileButton className='navLink' user={sessionUser} />
-      )}
+          <div>
+            {isLoaded && (
+              <ProfileButton className='navLink' user={sessionUser} />
+            )}
+          </div>
+
         </div>
 
     </div>

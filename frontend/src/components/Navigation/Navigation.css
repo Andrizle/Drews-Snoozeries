@@ -11,23 +11,27 @@
     margin-top: 10px;
 }
 
+.navRightSide {
+    display: flex;
+}
+
 #homeButton {
     height: 20px;
 }
 
 .navLink {
-    color: rgb(0, 3, 2);
+    background-color: buttonface;
     border-color: buttonborder;
     border-radius: 5px;
-    display: inline-block;
-    text-align: center;
+    border-width: 2px;
+    color: rgb(0, 3, 2);
     cursor: pointer;
-    box-sizing: border-box;
-    background-color: buttonface;
+    display: inline-block;
+    height: fit-content;
+    margin: 5px;
     padding-block: 1px;
     padding-inline: 10px;
-    border-width: 2px;
-    margin: 5px;
+    text-align: center;
     text-decoration: none;
 }
 
