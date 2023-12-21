@@ -4,15 +4,26 @@
     display: grid;
     grid: auto-flow / repeat(4, 1fr);
     margin: 10px;
+    width: 100%;
 }
 
 .spots {
     margin: 10px;
 }
 
-.spotPreviewImg {
+.spotPreview {
     border: solid white 1px;
+    border-radius: 10px;
     height: 225px;
+}
+
+.spotPreviewImg {
+    bottom: 0;
+    position: relative;
+    border-radius: 10px;
+    box-sizing: border-box;
+    height: 100%;
+    width: 100%;
 }
 
 .cityRatings {

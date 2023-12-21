@@ -3,6 +3,7 @@ import { csrfFetch } from "./csrf"
 const LOAD_SPOTS = 'spots/getSpots'
 const LOAD_SPOT = 'spots/getSpot'
 const ADD_SPOT = 'spots/addSpot'
+const ADD_IMAGE = 'spots/addImage'
 const DELETE_SPOT = 'spots/deleteSpot'
 
 
@@ -25,6 +26,13 @@ function addSpot(spot) {
     return{
         type: ADD_SPOT,
         spot
+    }
+}
+
+function addImage(image, spotId) {
+    return {
+        type: ADD_IMAGE,
+        image, spotId
     }
 }
 
@@ -59,9 +67,8 @@ export const fetchSpot = spotId => async dispatch => {
     }
 }
 
-export const createSpot = spot => async dispatch => {
-    try {
-        const response = await csrfFetch('/api/spots', {
+export const createSpot = (spot, imageArr) => async dispatch => {
+    const response = await csrfFetch('/api/spots', {
         method: 'POST',
         headers: { "Content-Type": 'application/json'},
         body: JSON.stringify(spot)
@@ -69,14 +76,34 @@ export const createSpot = spot => async dispatch => {
 
     if (response.ok) {
         const spot = await response.json()
-        dispatch(addSpot(spot))
-        return spot
-    }
-    } catch (response) {
-        const errors = await response.json()
-        return errors
+        console.log('in returned spot response', imageArr, spot)
+        if (spot) {
+            for (let image of imageArr) {
+            if (image)
+            dispatch(createImage(image, spot.id));
+            }
+            dispatch(addSpot(spot))
+
+            return spot
+        }
+
     }
 
+}
+
+export const createImage = (image, spotId) => async dispatch => {
+        const response = await csrfFetch(`/api/spots/${spotId}/images`, {
+            method: 'POST',
+            headers: { "Content-Type": 'application/json'},
+            body: JSON.stringify(image)
+        })
+
+        if (response.ok) {
+            const dataImg = await response.json()
+            dispatch(addImage(dataImg, spotId))
+
+            return dataImg
+        }
 }
 
 export const seekAndDestroySpot = spot => async dispatch => {
@@ -119,7 +146,31 @@ const spotReducer = (state = initialState, action) => {
                 ...state,
                 [action.spot.id]: {
                     ...state[action.spot.id],
-                    ...action.pokemon
+                    ...action.spot
+                }
+            }
+        }
+        case ADD_IMAGE: {
+            if (!state[action.spotId]["Images"]) {
+                const newState = {
+                    ...state,
+                    [state[action.spotId]]: {
+                       ...state[action.spotId],
+                       Images: {
+                        [action.image.id]: action.image
+                       }
+                    }
+                }
+                return newState
+            }
+            return {
+                ...state,
+                [state[action.spotId]]: {
+                   ...state[action.spotId],
+                   [state[action.spotId].Images]: {
+                        ...state[action.spotId].Images,
+                        [action.image.id]: action.image
+                   }
                 }
             }
         }

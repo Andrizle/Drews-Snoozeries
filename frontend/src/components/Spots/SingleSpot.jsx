@@ -8,6 +8,7 @@ import './SingleSpot.css';
 export default function SingleSpot() {
     const dispatch = useDispatch();
     const { spotId } = useParams();
+    const sessionUser = useSelector(state => state.session.user)
     const spot = useSelector(state => state.spots[spotId])
     // console.log(spot)
 
@@ -22,8 +23,8 @@ export default function SingleSpot() {
         let spotImage = spot.SpotImages[i]
 
         spotImage ?
-         spotImages.push(spotImage):
-        spotImages.push('something');
+        spotImages.push(spotImage):
+        null;
     }
 
     return (
@@ -31,13 +32,13 @@ export default function SingleSpot() {
             <h1>{spot.name}</h1>
             <h2>{spot.city} {spot.state}, {spot.country}</h2>
             <div className="imgContainer">
-                <div id='bigSpotImg'>
-                    <img src={spot.SpotImages[0]} alt="large image of spot from spotId" />
+                <div id='bigSpotImgContainer'>
+                    <img id='bigSpotImg' src={spot.SpotImages[0]?.url} alt="large image of spot from spotId" />
                 </div>
                 <div className="spotImageGrid">{spotImages.map(image => (
-                    image ?
-                    (<div key={image.id}><img src={image.url} alt="image of spot from spotId" /></div>) :
-                    null
+                    image.url ?
+                    (<div className="smallImageDiv" key={image.id}><img className="smallImages" src={image.url} alt="image of spot from spotId" /></div>) :
+                    <div key=''></div>
                 ))}
                 </div>
             </div>
@@ -51,7 +52,7 @@ export default function SingleSpot() {
                         <span ><h2 className="price">${spot.price}</h2>night</span>
                         <div className="ratings">
 
-                            { typeof spot.avgRating !== 'string' ?
+                            {spot.avgRating ?
                                 (<>
                                     <i className="fas fa-star"></i>
                                     <span className="avgRating">{spot.avgRating}</span>
@@ -73,7 +74,7 @@ export default function SingleSpot() {
                 </div>
             </div>
             <div className="spotReviews">
-                { typeof spot.avgRating !== 'string' ?
+                { spot.avgRating ?
                     (<>
                         <h2>
                             <i className="fas fa-star"></i>
@@ -87,7 +88,17 @@ export default function SingleSpot() {
                         </h2>
                         <SpotReviews />
                     </>) :
-                    (<span>Be the first to post a review!</span>)
+                    (<>
+                        <h2>
+                            <i className="fas fa-star"></i>
+                            <span className="avgRating">New</span>
+                        </h2>
+                        {
+                            sessionUser.id !== spot.Owner.id ?
+                            <h3>Be the first to post a review!</h3> :
+                            null
+                        }
+                    </>)
                 }
             </div>
         </div>

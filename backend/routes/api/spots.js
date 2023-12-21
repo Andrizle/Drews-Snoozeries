@@ -208,7 +208,7 @@ const defaultSpots = async (req, res, next) => {
         spot.avgRating = avgRating;
         if (previewImages) {
             spot.previewImage = previewImages.url
-        } else {spot.previewImage = "This spot has no preview image"}
+        } else {spot.previewImage = null}
 
         spots.push(spot)
     }

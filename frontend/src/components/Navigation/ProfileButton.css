@@ -1,5 +1,17 @@
+#profileButton{
+    margin-top: 5px;
+}
+
 .userEmail {
     margin-bottom: 10px;
+}
+
+.profile-dropdown {
+    display: flex;
+}
+
+.userDropDown {
+    justify-content: end;
 }
 
 #manageButton {

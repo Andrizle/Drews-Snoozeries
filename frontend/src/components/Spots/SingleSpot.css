@@ -3,14 +3,27 @@
     grid-template-columns: 1fr 1fr;
 }
 
-.spotImageGrid {
-    display: grid;
-    grid: 1fr 1fr / 1fr 1fr
+#bigSpotImgContainer {
+    border: 1px solid white;
 }
 
 #bigSpotImg {
-    height: 500px;
-    border: 1px solid white;
+    width: 100%;
+    height: 100%;
+}
+
+.spotImageGrid {
+    border: solid white 1px;
+    display: grid;
+    grid: 1fr 1fr / 1fr 1fr;
+}
+
+.smallImageDiv {
+    width: 90%;
+}
+
+.smallImages {
+    width: 100%;
 }
 
 #spotTextContainer {
@@ -22,12 +35,13 @@
     border: 1px solid white;
     border-radius: 5px;
     padding: 0px 15px;
+    margin-top: 20px;
 }
 
 .priceReviews {
     display: flex;
     justify-content: space-between;
-    padding-top: 15px;
+    padding-top: 5px;
 }
 
 .price {
