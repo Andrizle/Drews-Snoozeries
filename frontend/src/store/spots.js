@@ -76,7 +76,6 @@ export const createSpot = (spot, imageArr) => async dispatch => {
 
     if (response.ok) {
         const spot = await response.json()
-        console.log('in returned spot response', imageArr, spot)
         if (spot) {
             for (let image of imageArr) {
             if (image)
@@ -89,6 +88,25 @@ export const createSpot = (spot, imageArr) => async dispatch => {
 
     }
 
+}
+
+export const updateSpot = (spot, spotId) => async dispatch => {
+    const response = await csrfFetch(`/api/spots/${spotId}`, {
+        method: 'PUT',
+        headers: { "Content-Type": 'application/json' },
+        body: JSON.stringify(spot)
+    });
+
+    if (response.ok) {
+        const spot = await response.json();
+
+        if (spot) {
+            console.log(spot)
+            dispatch(addSpot(spot))
+
+            return spot
+        }
+    }
 }
 
 export const createImage = (image, spotId) => async dispatch => {

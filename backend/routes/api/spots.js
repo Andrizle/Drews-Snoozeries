@@ -8,6 +8,11 @@ const { User, Spot, Review, SpotImage, ReviewImage, Booking } = require('../../d
 
 const router = express.Router();
 
+function roundWithPrecision(num, precision) {
+    const multiplier = Math.pow(10, precision);
+    return Math.round( num * multiplier ) / multiplier;
+}
+
 const authenticateUser = async (req, res, next) => {
     const { user } = req;
 
@@ -189,11 +194,6 @@ const defaultSpots = async (req, res, next) => {
         });
 
         let avgRating = reviewsSum / reviewsCount;
-
-        function roundWithPrecision(num, precision) {
-            const multiplier = Math.pow(10, precision);
-            return Math.round( num * multiplier ) / multiplier;
-        }
 
         avgRating = roundWithPrecision(avgRating, 2)
 
@@ -450,7 +450,7 @@ router.post('/', authenticateUser, validateSpot, async (req, res, next) => {
             lng: Number.parseFloat(lng),
             name,
             description,
-            price: Number.parseFloat(price)
+            price: Number.parseFloat(price).toFixed(2)
         });
 
         await newSpot.validate();
@@ -610,7 +610,7 @@ async (req, res, next) => {
 router.put('/:spotId',
 authenticateUser, authorizeUser, validateSpot,
 async (req, res, next) => {
-    const { address, city, state, country, lat, lng, name, description, price } = req.body;
+    const { address, city, state, country, name, description, price } = req.body;
 
     const spot = await Spot.findByPk(req.params.spotId);
 
@@ -618,11 +618,11 @@ async (req, res, next) => {
     spot.city = city;
     spot.state = state;
     spot.country = country;
-    spot.lat = lat;
-    spot.lng = lng;
+    // spot.lat = lat;
+    // spot.lng = lng;
     spot.name = name;
     spot.description = description;
-    spot.price = price;
+    spot.price = Number.parseFloat(price).toFixed(2);
 
     spot.save();
 

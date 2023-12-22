@@ -68,7 +68,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     description: DataTypes.STRING,
-    price: DataTypes.DOUBLE
+    price: DataTypes.DOUBLE(10, 2)
   }, {
     sequelize,
     modelName: 'Spot',

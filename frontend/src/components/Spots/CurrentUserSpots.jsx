@@ -48,12 +48,8 @@ const CurrentUserSpots = () => {
                         </Link>
                         <div className='usersManageButtons'>
                             <button className='updateButton'
-                            onClick={() => {throw alert('Feature coming soon')}}
+                            onClick={() => {navigate(`/spots/${spot.id}/edit`)}}
                             >Update</button>
-                            {/* <OpenModalButton
-                            className='updateButton'
-                            buttonText='Update'
-                            />*/}
                             <OpenModalButton
                             buttonText='Delete'
                             modalComponent={<DeleteSpotModal spot={spot}/>}

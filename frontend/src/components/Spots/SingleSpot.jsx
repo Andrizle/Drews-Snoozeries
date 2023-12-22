@@ -19,7 +19,6 @@ export default function SingleSpot() {
             dispatch(fetchSpot(spotId))
         }, [dispatch, spotId, dispatched])
 
-
     if (!spot || !spot.SpotImages) return null;
     const spotImages = []
     for (let i = 1; i < 5; i++) {
@@ -101,7 +100,7 @@ export default function SingleSpot() {
                             null
                         }
 
-                        <SpotReviews dispatched={dispatched}/>
+                        <SpotReviews dispatched={dispatched} setDispatched={setDispatched}/>
                     </>) :
                     (<>
                         <h2>

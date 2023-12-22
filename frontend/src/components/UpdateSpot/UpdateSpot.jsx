@@ -1,12 +1,13 @@
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { createSpot } from '../../store/spots';
-import './CreateSpot.css'
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate, useParams } from 'react-router-dom';
+import { fetchSpot, updateSpot } from '../../store/spots';
 
-export default function CreateSpot() {
+export default function UpdateSpot() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const { spotId } = useParams();
+    const spot = useSelector(state => state.spots[spotId]);
     const [address, setAddress] = useState("");
     const [city, setCity] = useState("");
     const [state, setState] = useState("");
@@ -14,11 +15,11 @@ export default function CreateSpot() {
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
     const [price, setPrice] = useState('');
-    const [previewImage, setPreviewImage] = useState('');
-    const [spotImg1, setSpotImg1] = useState('');
-    const [spotImg2, setSpotImg2] = useState('');
-    const [spotImg3, setSpotImg3] = useState('');
-    const [spotImg4, setSpotImg4] = useState('');
+    // const [previewImage, setPreviewImage] = useState('');
+    // const [spotImg1, setSpotImg1] = useState('');
+    // const [spotImg2, setSpotImg2] = useState('');
+    // const [spotImg3, setSpotImg3] = useState('');
+    // const [spotImg4, setSpotImg4] = useState('');
 
     const [errors, setErrors] = useState({});
 
@@ -29,17 +30,34 @@ export default function CreateSpot() {
     const updateDescription = e => setDescription(e.target.value);
     const updateName = e => setName(e.target.value);
     const updatePrice = e => setPrice(e.target.value);
-    const updatePreviewImage = e => setPreviewImage(e.target.value)
-    const updateSpotImg1 = e => setSpotImg1(e.target.value)
-    const updateSpotImg2 = e => setSpotImg2(e.target.value)
-    const updateSpotImg3 = e => setSpotImg3(e.target.value)
-    const updateSpotImg4 = e => setSpotImg4(e.target.value)
+    // const updatePreviewImage = e => setPreviewImage(e.target.value)
+    // const updateSpotImg1 = e => setSpotImg1(e.target.value)
+    // const updateSpotImg2 = e => setSpotImg2(e.target.value)
+    // const updateSpotImg3 = e => setSpotImg3(e.target.value)
+    // const updateSpotImg4 = e => setSpotImg4(e.target.value)
+
+    useEffect(() => {
+        dispatch(fetchSpot(spotId))
+    }, [dispatch, spotId]);
+
+    useEffect(() => {
+        if (spot) {
+        setAddress(spot.address);
+        setCity(spot.city);
+        setState(spot.state);
+        setCountry(spot.country);
+        setName(spot.name);
+        setDescription(spot.description);
+        setPrice(spot.price);
+    }
+    }, [spot])
+
 
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const createdSpot = {
+        const updatedSpot = {
             address,
             city,
             state,
@@ -49,40 +67,40 @@ export default function CreateSpot() {
             price
         }
 
-        const imgArr = [
-            {
-                url: previewImage,
-                preview: true
-            },
-            spotImg1 ?
-            {
-                url: spotImg1,
-                preview: false
-            } :
-            null,
-            spotImg2 ?
-            {
-                url: spotImg2,
-                preview: false
-            } :
-            null,
-            spotImg3 ?
-            {
-                url: spotImg3,
-                preview: false
-            } :
-            null,
-            spotImg4 ?
-            {
-                url: spotImg4,
-                preview: false
-            } :
-            null
-        ]
+        // const imgArr = [
+        //     {
+        //         url: previewImage,
+        //         preview: true
+        //     },
+        //     spotImg1 ?
+        //     {
+        //         url: spotImg1,
+        //         preview: false
+        //     } :
+        //     null,
+        //     spotImg2 ?
+        //     {
+        //         url: spotImg2,
+        //         preview: false
+        //     } :
+        //     null,
+        //     spotImg3 ?
+        //     {
+        //         url: spotImg3,
+        //         preview: false
+        //     } :
+        //     null,
+        //     spotImg4 ?
+        //     {
+        //         url: spotImg4,
+        //         preview: false
+        //     } :
+        //     null
+        // ]
 
 
 
-        const returnedSpot = await dispatch(createSpot(createdSpot, imgArr))
+        const returnedSpot = await dispatch(updateSpot(updatedSpot, spotId))
         .catch(async (res) => {
             const data = await res.json();
             if (data?.errors) {
@@ -90,9 +108,11 @@ export default function CreateSpot() {
             }
           });
 
+
           if (returnedSpot) {
             navigate(`/spots/${returnedSpot.id}`)
-        }
+          }
+
     }
 
 
@@ -201,7 +221,7 @@ export default function CreateSpot() {
                             </label>
                             {errors.price && <p className='errors'>Price per day is required</p>}
                         </div>
-                        <div id='imageInputContainer'>
+                        {/* <div id='imageInputContainer'>
                             <h3 className='createHeaders'>Liven up your spot with photos</h3>
                             <p className='createDescriptions'>Submit a link to at least one photo to publish your spot
                             </p>
@@ -242,9 +262,9 @@ export default function CreateSpot() {
                                 value={spotImg4}
                                 onChange={updateSpotImg4}
                             />
-                        </div>
+                        </div> */}
                         <div>
-                            <button type='submit'>Create Spot</button>
+                            <button type='submit'>Update Spot</button>
                         </div>
                     </form>
                 </div>

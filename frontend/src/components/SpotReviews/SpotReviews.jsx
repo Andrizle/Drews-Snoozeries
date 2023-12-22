@@ -3,10 +3,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { fetchReviews } from "../../store/reviews";
 import './SpotReviews.css'
+import OpenModalButton from "../OpenModalButton";
+import DeleteReviewModal from "../DeleteReviewModal/DeleteReviewModal";
 
-export default function SpotReviews({dispatched}) {
+export default function SpotReviews({dispatched, setDispatched}) {
     const dispatch = useDispatch();
     const { spotId } = useParams();
+    const sessionUser = useSelector(state => state.session.user)
     const reviews = Object.values(useSelector(state => state.reviews.spot))
 
     useEffect(() => {
@@ -35,6 +38,13 @@ export default function SpotReviews({dispatched}) {
                     <h3 className="reviewer">{review.User?.firstName}</h3>
                     <div className="reviewDate">{month(review.createdAt)} {year(review.createdAt)}</div>
                     <div className="reviewText">{review.review}</div>
+                    {sessionUser?.id == review.userId ?
+                        <OpenModalButton
+                            buttonText='Delete'
+                            modalComponent={<DeleteReviewModal review={review} setDispatched={setDispatched}/>}
+                        /> :
+                        null
+                    }
                 </div>
             ))}
 
