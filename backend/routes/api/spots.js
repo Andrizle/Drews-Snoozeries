@@ -386,15 +386,19 @@ router.get('/:spotId/bookings', authenticateUser, async (req, res, next) => {
 const validateSpot = [
     check('address')
       .exists({ checkFalsy: true })
+      .notEmpty()
       .withMessage('Street address is required'),
     check('city')
       .exists({ checkFalsy: true })
+      .notEmpty()
       .withMessage('City is required'),
     check('state')
       .exists({checkFalsy: true})
+      .notEmpty()
       .withMessage('State is required'),
     check('country')
       .exists({ checkFalsy: true })
+      .notEmpty()
       .withMessage('Country is required'),
     // check('lat')
     //   .exists({ checkFalsy: true })
@@ -414,6 +418,7 @@ const validateSpot = [
     //   }),
     check('name')
       .exists({ checkFalsy: true })
+      .notEmpty()
       .isLength({max: 50})
       .withMessage('Name must be less than 50 characters'),
     check('description')

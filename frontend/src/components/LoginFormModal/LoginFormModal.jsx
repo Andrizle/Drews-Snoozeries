@@ -29,7 +29,9 @@ function LoginFormModal() {
   return (
     <>
       <h1>Log In</h1>
-      <form onSubmit={handleSubmit}>
+      <form
+      id='loginForm'
+      onSubmit={handleSubmit}>
         <label>
           <input
           placeholder='Username or Email'

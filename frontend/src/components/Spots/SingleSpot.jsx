@@ -1,20 +1,23 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { fetchSpot } from "../../store/spots";
 import SpotReviews from "../SpotReviews/SpotReviews";
 import './SingleSpot.css';
+import OpenModalButton from "../OpenModalButton";
+import PostReviewModal from "../PostReviewModal/PostReviewModal";
 
 export default function SingleSpot() {
     const dispatch = useDispatch();
     const { spotId } = useParams();
+    const [dispatched, setDispatched] = useState(false)
     const sessionUser = useSelector(state => state.session.user)
     const spot = useSelector(state => state.spots[spotId])
     // console.log(spot)
 
     useEffect(() => {
             dispatch(fetchSpot(spotId))
-        }, [dispatch, spotId])
+        }, [dispatch, spotId, dispatched])
 
 
     if (!spot || !spot.SpotImages) return null;
@@ -86,7 +89,19 @@ export default function SingleSpot() {
                                 ' Reviews'
                             }</span>
                         </h2>
-                        <SpotReviews />
+                        {
+                            sessionUser?.id !== spot.Owner.id ?
+                            <OpenModalButton
+                                buttonText='Post Your Review'
+                                modalComponent={<PostReviewModal
+                                                    spot={spot}
+                                                    setDispatched={setDispatched}
+                                                />}
+                            /> :
+                            null
+                        }
+
+                        <SpotReviews dispatched={dispatched}/>
                     </>) :
                     (<>
                         <h2>
@@ -94,7 +109,7 @@ export default function SingleSpot() {
                             <span className="avgRating">New</span>
                         </h2>
                         {
-                            sessionUser.id !== spot.Owner.id ?
+                            sessionUser?.id !== spot.Owner.id ?
                             <h3>Be the first to post a review!</h3> :
                             null
                         }

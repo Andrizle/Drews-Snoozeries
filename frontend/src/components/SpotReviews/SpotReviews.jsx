@@ -4,14 +4,14 @@ import { useParams } from "react-router-dom";
 import { fetchReviews } from "../../store/reviews";
 import './SpotReviews.css'
 
-export default function SpotReviews() {
+export default function SpotReviews({dispatched}) {
     const dispatch = useDispatch();
     const { spotId } = useParams();
-    const reviews = Object.values(useSelector(state => state.reviews))
+    const reviews = Object.values(useSelector(state => state.reviews.spot))
 
     useEffect(() => {
             dispatch(fetchReviews(spotId))
-        }, [dispatch, spotId])
+        }, [dispatch, spotId, dispatched])
 
     if (!reviews) return null;
 
@@ -32,7 +32,7 @@ export default function SpotReviews() {
         <div className="reviewsContainer">
             {reviews.map(review => (
                 <div className="reviewDetails" key={review.id}>
-                    <h3 className="reviewer">{review.User.firstName}</h3>
+                    <h3 className="reviewer">{review.User?.firstName}</h3>
                     <div className="reviewDate">{month(review.createdAt)} {year(review.createdAt)}</div>
                     <div className="reviewText">{review.review}</div>
                 </div>

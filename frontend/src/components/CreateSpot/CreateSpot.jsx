@@ -112,7 +112,7 @@ export default function CreateSpot() {
                                 type="text"
                                 value={country}
                                 onChange={updateCountry}
-                                required
+                                // required
                             />
                         </label>
                         {errors.country && <p className='errors'>{errors.country}</p>}
@@ -183,7 +183,7 @@ export default function CreateSpot() {
                                 value={name}
                                 onChange={updateName}
                             />
-                            {errors.name && <p className='errors'>{errors.name}</p>}
+                            {errors.name && <p className='errors'>A title for your spot is required</p>}
                         </div>
                         <div className='createContainers'>
                             <h3 className='createHeaders'>Set a base price for your spot</h3>
