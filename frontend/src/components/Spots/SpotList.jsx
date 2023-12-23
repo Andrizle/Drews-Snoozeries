@@ -26,11 +26,14 @@ const SpotsList = () => {
                             <div className='cityRatings'>
                                 <span className='cityState'>{spot.city}, {spot.state}</span>
                                 {(spot.avgRating) ?
-                                (<span><i className='fas fa-star'></i>{spot.avgRating}</span>) :
+                                (<span><i className='fas fa-star'></i>{parseFloat(spot.avgRating).toFixed(1)}</span>) :
                                 (<span><i className="fas fa-star"></i>New</span>)
                                 }
                             </div>
-                                <p>${spot.price} night</p>
+                            {Number.isInteger(spot.price) ?
+                            <p>${spot.price} night</p> :
+                            <p>${parseFloat(spot.price).toFixed(2)} night</p>
+                            }
                         </Link>
                 </div>
 

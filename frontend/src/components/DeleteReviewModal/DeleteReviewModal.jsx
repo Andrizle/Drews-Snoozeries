@@ -3,14 +3,14 @@ import { useModal } from '../../context/Modal';
 import { seekAndDestroyReview } from '../../store/reviews';
 
 
-function DeleteReviewModal({review, setDispatched}) {
+function DeleteReviewModal({review}) {
   const dispatch = useDispatch();
   const { closeModal } = useModal();
 
-  const handleClick = (e) => {
+  const handleClick = async (e) => {
     e.preventDefault();
-    return dispatch(seekAndDestroyReview(review))
-    .then(setDispatched(true))
+    
+    await dispatch(seekAndDestroyReview(review))
     .then(closeModal);
   };
 

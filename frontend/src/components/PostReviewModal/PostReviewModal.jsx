@@ -1,12 +1,13 @@
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useModal } from '../../context/Modal';
 import { postReview } from '../../store/reviews';
 import { useState } from 'react';
 import RatingInput from './RatingInput';
 import './PostReviewModal.css';
 
-export default function PostReviewModal({spot, setDispatched}) {
+export default function PostReviewModal({spot}) {
     const dispatch = useDispatch();
+    const sessionUser = useSelector(state => state.session.user)
     const { closeModal } = useModal();
     const [review, setReview] = useState('');
     const [stars, setStars] = useState('');
@@ -24,8 +25,7 @@ export default function PostReviewModal({spot, setDispatched}) {
             stars
         }
 
-        await dispatch(postReview(newReview, spot.id))
-        .then(setDispatched(true))
+        await dispatch(postReview(newReview, spot.id, sessionUser))
         .then(closeModal)
         .catch(async (res) => {
             const data = await res.json();
@@ -63,7 +63,7 @@ export default function PostReviewModal({spot, setDispatched}) {
                             stars={stars}
                         /> <span>Stars</span>
                     </div>
-                        {errors.review && <p className='errors'>{errors.review}</p> }
+                        {errors.stars && <p className='errors'>{errors.stars}</p> }
                     <button
                         type='submit'
                         className='bigButton' id='submitReviewButton'

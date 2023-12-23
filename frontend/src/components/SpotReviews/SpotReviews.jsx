@@ -6,15 +6,19 @@ import './SpotReviews.css'
 import OpenModalButton from "../OpenModalButton";
 import DeleteReviewModal from "../DeleteReviewModal/DeleteReviewModal";
 
-export default function SpotReviews({dispatched, setDispatched}) {
+export default function SpotReviews() {
     const dispatch = useDispatch();
     const { spotId } = useParams();
     const sessionUser = useSelector(state => state.session.user)
     const reviews = Object.values(useSelector(state => state.reviews.spot))
 
+    function compareNumbers(a, b) {
+        return b.id - a.id;
+    }
+
     useEffect(() => {
             dispatch(fetchReviews(spotId))
-        }, [dispatch, spotId, dispatched])
+        }, [dispatch, spotId])
 
     if (!reviews) return null;
 
@@ -33,7 +37,7 @@ export default function SpotReviews({dispatched, setDispatched}) {
 
     return (
         <div className="reviewsContainer">
-            {reviews.map(review => (
+            {reviews.sort(compareNumbers).map(review => (
                 <div className="reviewDetails" key={review.id}>
                     <h3 className="reviewer">{review.User?.firstName}</h3>
                     <div className="reviewDate">{month(review.createdAt)} {year(review.createdAt)}</div>
@@ -41,7 +45,7 @@ export default function SpotReviews({dispatched, setDispatched}) {
                     {sessionUser?.id == review.userId ?
                         <OpenModalButton
                             buttonText='Delete'
-                            modalComponent={<DeleteReviewModal review={review} setDispatched={setDispatched}/>}
+                            modalComponent={<DeleteReviewModal review={review} />}
                         /> :
                         null
                     }
