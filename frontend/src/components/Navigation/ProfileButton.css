@@ -11,7 +11,18 @@
 }
 
 .userDropDown {
+    background-color: rgb(228, 218, 208);
+    border: solid rgb(228, 218, 208) 1px;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
     justify-content: end;
+    padding: 10px;
+    position: absolute;
+    top: 40px;
+    right: 10px;
+    z-index: 5;
+    width: 150px;
 }
 
 #manageButton {

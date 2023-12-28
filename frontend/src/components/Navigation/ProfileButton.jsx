@@ -60,20 +60,16 @@ function ProfileButton({ user }) {
           </div>
         ) : (
           <div className='userDropDown'>
-            <li>
               <OpenModalButton
                 buttonText="Log In"
                 onButtonClick={closeMenu}
                 modalComponent={<LoginFormModal />}
               />
-            </li>
-            <li>
               <OpenModalButton
                 buttonText="Sign Up"
                 onButtonClick={closeMenu}
                 modalComponent={<SignupFormModal />}
               />
-            </li>
           </div>
         )}
       </div>

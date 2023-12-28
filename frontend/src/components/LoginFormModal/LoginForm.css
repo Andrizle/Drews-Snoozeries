@@ -1,3 +1,11 @@
+#loginModal {
+    width: 275px;
+}
+
+.loginInputs {
+    width: 250px;
+}
+
 h1 {
     display: grid;
     justify-content: center;
