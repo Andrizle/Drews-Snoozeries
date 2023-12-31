@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useModal } from '../../context/Modal';
 import { postReview } from '../../store/reviews';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import RatingInput from './RatingInput';
 import './PostReviewModal.css';
 
@@ -11,9 +11,16 @@ export default function PostReviewModal({spot}) {
     const { closeModal } = useModal();
     const [review, setReview] = useState('');
     const [stars, setStars] = useState('');
+    const [allow, setAllow] = useState(true)
 
     const [errors, setErrors] = useState({});
     const [message, setMessage] = useState({})
+
+    useEffect(() => {
+        if (review.length < 10 || !stars) {
+            setAllow(true)
+        } else {setAllow(false)}
+    }, [review.length, stars])
 
     const updateReview = e => setReview(e.target.value)
 
@@ -67,6 +74,7 @@ export default function PostReviewModal({spot}) {
                     <button
                         type='submit'
                         className='bigButton' id='submitReviewButton'
+                        disabled={allow}
                     >
                         Submit Your Review</button>
                 </form>

@@ -9,7 +9,7 @@ function DeleteReviewModal({review}) {
 
   const handleClick = async (e) => {
     e.preventDefault();
-    
+
     await dispatch(seekAndDestroyReview(review))
     .then(closeModal);
   };
@@ -18,7 +18,7 @@ function DeleteReviewModal({review}) {
     <div id='deleteModal'>
       <h1 id='deleteHeader'>Confirm Delete</h1>
       <div className='deleteModalContent'>
-        <p id='deleteConfirmText'>Are you sure you want to remove this spot from the listings?</p>
+        <p id='deleteConfirmText'>Are you sure you want to delete this review?</p>
         <button className='bigButton' id='deleteButton'
         onClick={handleClick}
         >Yes (Delete Review)</button>

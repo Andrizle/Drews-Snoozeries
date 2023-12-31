@@ -19,6 +19,8 @@ button {
 }
 
 .updateButton {
+    align-self: center;
+    height: fit-content;
     margin: 0 10px;
     width: fit-content;
 }

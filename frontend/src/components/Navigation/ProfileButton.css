@@ -2,37 +2,43 @@
     margin-top: 5px;
 }
 
-.userEmail {
+.userDropDown {
+    background-color: rgb(131, 122, 111);
+    border: solid rgb(131, 122, 111) 1px;
+    border-radius: 5px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    padding: 10px;
+    position: absolute;
+    top: 40px;
+    right: 10px;
+    width: 150px;
+    z-index: 5;
+}
+
+#userEmail {
     margin-bottom: 10px;
+    margin-right: 10px;
+    max-width: 50px;
+    text-wrap: wrap;
 }
 
 .profile-dropdown {
     display: flex;
 }
 
-.userDropDown {
-    background-color: rgb(228, 218, 208);
-    border: solid rgb(228, 218, 208) 1px;
-    border-radius: 5px;
-    display: flex;
-    flex-direction: column;
-    justify-content: end;
-    padding: 10px;
-    position: absolute;
-    top: 40px;
-    right: 10px;
-    z-index: 5;
-    width: 150px;
-}
-
 #manageButton {
+    /* align-self: center; */
     color: white;
     border-bottom: solid white 1px;
     border-top: solid white 1px;
-    padding: 5px;
+    padding: 5px 15px;
     text-decoration: none;
 }
 
 .logoutButton {
+    align-self: center;
     margin-top: 10px;
 }

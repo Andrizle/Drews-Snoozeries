@@ -1,4 +1,4 @@
 .modalButton {
-    width: 90%;
+    width: fit-content;
     margin: 5px;
 }

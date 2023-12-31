@@ -1,5 +1,6 @@
 .errors {
     color: rgb(165, 14, 14);
+    margin-block-end: 0;
 }
 
 #createPage {
@@ -20,7 +21,7 @@
 
 .createHeaders {
     margin-block-start: 0;
-    margin-block-end: 0;
+    margin-block-end: 10px;
 }
 
 .createDescriptions {
@@ -31,6 +32,7 @@
 .createContainers {
     border-bottom: solid white 1px;
     border-top: solid white 1px;
+    margin-top: 10px;
     padding-bottom: 20px;
     padding-top: 10px;
 }

@@ -118,7 +118,7 @@ export default function UpdateSpot() {
 
     return (
         <>
-            <h1>Create a New Spot</h1>
+            <h1>Update Your Spot</h1>
             <div id='createPage'>
                 <div id='createTextContainer'>
                     <h3 className='createHeaders'>Where&apos;s your place located?</h3>
