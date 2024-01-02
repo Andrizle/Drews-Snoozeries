@@ -17,6 +17,11 @@
 
 #homeButton {
     height: 20px;
+    margin-top: 10px;
+}
+
+#webLogo {
+    border-radius: 5px;
 }
 
 .navLink {
