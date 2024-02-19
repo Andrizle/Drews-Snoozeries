@@ -1,8 +1,7 @@
 <!--!!START SILENT -->
-# AirBnB Clone
+# Drew's Snoozeries
 <!--!!END -->
 <!--!!ADD -->
-Drew's Snoozeries
 <!--!!END_ADD -->
 
 ## Database Schema Design
@@ -14,8 +13,6 @@ Drew's Snoozeries
 [airbnb-db-diagram-info]: https://appacademy-open-assets.s3.us-west-1.amazonaws.com/Modular-Curriculum/content/week-12/airbnb-db-diagram-info.txt
 <!--!!END -->
 <!--!!ADD -->
-![db-schema]
-[db-schema]: ./images/airbnb_dbdiagram.png
 <!--!!END_ADD -->
 
 ## API Documentation
